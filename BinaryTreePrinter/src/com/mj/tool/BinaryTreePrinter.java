@@ -55,7 +55,7 @@ public class BinaryTreePrinter {
 	}
 	
 	public void print( NodeOperation operation) {
-		System.out.println(printString(operation));
+		System.out.print(printString(operation));
 	}
 	
 	public void println(NodeOperation operation) {
