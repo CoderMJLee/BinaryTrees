@@ -105,6 +105,31 @@ public class Main {
 			  4   7   13
 		 */
 		
+		printer.println(new NodeOperation() {
+			@Override
+			public Object root() {
+				return "GuangDong";
+			}
+			
+			@Override
+			public Object left(Object node) {
+				if (node.equals("GuangDong")) return "MeiZhou";
+				if (node.equals("GuangZhou")) return "TianHe";
+				if (node.equals("MeiZhou")) return "WuHua";
+				if (node.equals("WuHua")) return "ShuiZhai";
+				return null;
+			}
+			
+			@Override
+			public Object right(Object node) {
+				if (node.equals("GuangDong")) return "GuangZhou";
+				if (node.equals("GuangZhou")) return "YueXiu";
+				if (node.equals("MeiZhou")) return "MeiXian";
+				if (node.equals("WuHua")) return "MianYang";
+				return null;
+			}
+		});
+		
 		// also can write to file
 		String filePath = "/Users/mj/Desktop/bst.txt";
 		// String filePath = "C:/test/bst.txt";
