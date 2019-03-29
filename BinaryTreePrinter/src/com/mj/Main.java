@@ -108,27 +108,36 @@ public class Main {
 		printer.println(new NodeOperation() {
 			@Override
 			public Object root() {
-				return "GuangDong";
+				return "Life";
 			}
 			
 			@Override
 			public Object left(Object node) {
-				if (node.equals("GuangDong")) return "MeiZhou";
-				if (node.equals("GuangZhou")) return "TianHe";
-				if (node.equals("MeiZhou")) return "WuHua";
-				if (node.equals("WuHua")) return "ShuiZhai";
+				if (node.equals("Life")) return "Animal";
+				if (node.equals("Person")) return "Man";
+				if (node.equals("Animal")) return "Cat";
+				if (node.equals("Dog")) return "Teddy";
 				return null;
 			}
 			
 			@Override
 			public Object right(Object node) {
-				if (node.equals("GuangDong")) return "GuangZhou";
-				if (node.equals("GuangZhou")) return "YueXiu";
-				if (node.equals("MeiZhou")) return "MeiXian";
-				if (node.equals("WuHua")) return "MianYang";
+				if (node.equals("Life")) return "Person";
+				if (node.equals("Person")) return "Woman";
+				if (node.equals("Animal")) return "Dog";
+				if (node.equals("Dog")) return "SingleDog";
 				return null;
 			}
 		});
+		/*
+		          Life
+		        /      \
+		  Animal        Person
+		   /  \         /    \
+		Cat    Dog    Man    Woman
+		     /     \
+		 Teddy   SingleDog
+		 */
 		
 		// also can write to file
 		String filePath = "/Users/mj/Desktop/bst.txt";
