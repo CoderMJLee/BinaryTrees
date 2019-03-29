@@ -78,20 +78,20 @@ public class Main {
 			}
 			
 			@Override
-			public Object right(Object node) {
-				if (node.equals(8)) return 10;
-				if (node.equals(10)) return 14;
-				if (node.equals(3)) return 6;
-				if (node.equals(6)) return 7;
-				return null;
-			}
-			
-			@Override
 			public Object left(Object node) {
 				if (node.equals(8)) return 3;
 				if (node.equals(3)) return 1;
 				if (node.equals(6)) return 4;
 				if (node.equals(14)) return 13;
+				return null;
+			}
+			
+			@Override
+			public Object right(Object node) {
+				if (node.equals(8)) return 10;
+				if (node.equals(10)) return 14;
+				if (node.equals(3)) return 6;
+				if (node.equals(6)) return 7;
 				return null;
 			}
 		});
