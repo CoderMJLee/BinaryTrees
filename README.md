@@ -1,11 +1,12 @@
 # BinaryTrees
-> Some operations for binary tree
+- Some operations for binary tree
+- 一些二叉树相关的操作
 
 
 
 ## BinaryTreePrinter
-
-> Print binary tree like a real tree.
+- Print a binary tree like a real tree.
+- 树状打印一棵二叉树
 - 输入一棵二叉搜索树（input a binary search tree）: 
 	-  [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
 - 输出（output）:
@@ -26,19 +27,19 @@ public class BinarySearchTree implements NodeOperation {
 	/********** NodeOperation **********/
 	@Override
 	public Object root() {
-    // tell me who is the root node
+		// tell me who is the root node
 		return mRoot;
 	}
 
 	@Override
 	public Object left(Object node) {
-    // tell me how get the left child of the node
+		// tell me how to get the left child of the node
 		return ((Node)node).mLeft;
 	}
 
 	@Override
 	public Object right(Object node) {
-    // tell me how get the right child of the node
+		// tell me how to get the right child of the node
 		return ((Node)node).mRight;
 	}
 	/********** NodeOperation **********/
@@ -46,7 +47,7 @@ public class BinarySearchTree implements NodeOperation {
 
 // new some bsts
 BinarySearchTree<Integer> bst1 = bst(new Integer[]{
-		7,4,9,2,5,8,11,1,3,6,10,12
+		7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12
 	});
 BinarySearchTree<Integer> bst2 = bst(new Integer[]{
 		381, 12, 410, 9, 40, 394, 540, 
