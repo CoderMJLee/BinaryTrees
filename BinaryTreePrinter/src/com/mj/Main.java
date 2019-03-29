@@ -20,8 +20,8 @@ public class Main {
 		BinaryTreePrinter printer = new BinaryTreePrinter();
 		
 		// optional setting
-		printer.setCompacted(false);
-		printer.setClosestSpace(3);
+		// printer.setCompacted(false);
+		// printer.setClosestSpace(3);
 		
 		// print
 		BinarySearchTree<Integer> bst1 = bst(new Integer[]{
