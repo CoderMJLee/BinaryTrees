@@ -1,4 +1,4 @@
-package com.mj;
+package com.mj.example;
 
 import com.mj.tool.BinaryTreePrinter;
 import com.mj.tool.BinaryTreePrinter.NodeOperation;
@@ -19,15 +19,12 @@ public class Main {
 		// initialize printer
 		BinaryTreePrinter printer = new BinaryTreePrinter();
 		
-		// optional setting
-		// printer.setCompacted(false);
-		// printer.setClosestSpace(3);
-		
 		// print
 		BinarySearchTree<Integer> bst1 = bst(new Integer[]{
 				7,4,9,2,5,8,11,1,3,6,10,12
 			});
 		printer.println(bst1);
+//		printer.println(bst1, true, 3);
 		/*
 		        7
 		      /   \
@@ -94,6 +91,11 @@ public class Main {
 				if (node.equals(6)) return 7;
 				return null;
 			}
+
+			@Override
+			public Object string(Object node) {
+				return node;
+			}
 		});
 		/*
 		          8
@@ -128,6 +130,11 @@ public class Main {
 				if (node.equals("Dog")) return "SingleDog";
 				return null;
 			}
+
+			@Override
+			public Object string(Object node) {
+				return node;
+			}
 		});
 		/*
 		          Life
@@ -140,11 +147,11 @@ public class Main {
 		 */
 		
 		// also can write to file
-		String filePath = "/Users/mj/Desktop/bst.txt";
 		// String filePath = "C:/test/bst.txt";
+		String filePath = "/Users/mj/Desktop/bst.txt";
 
 		// generate print string
-		String printString = printer.printString(bst1);
-		Files.writeToFile(filePath, printString);
+		String string = printer.printString(bst1);
+		Files.writeToFile(filePath, string);
 	}
 }

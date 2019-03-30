@@ -1,4 +1,4 @@
-package com.mj;
+package com.mj.example;
 
 import java.util.Comparator;
 
@@ -73,11 +73,6 @@ public class BinarySearchTree<E> implements NodeOperation {
 			mElement = element;
 			mParent = parent;
 		}
-		
-		@Override
-		public String toString() {
-			return mElement.toString();
-		}
 	}
 
 	/********** NodeOperation **********/
@@ -94,6 +89,11 @@ public class BinarySearchTree<E> implements NodeOperation {
 	@Override
 	public Object right(Object node) {
 		return ((Node)node).mRight;
+	}
+
+	@Override
+	public Object string(Object node) {
+		return ((Node)node).mElement;
 	}
 	/********** NodeOperation **********/
 }

@@ -37,39 +37,61 @@ public class BinaryTreePrinter {
 	private StringNode mRoot;
 	private int mMinNodeX;
 	private int mNodeLength;
-	private int mClosestSpace = 3; 
-	private boolean mCompacted = false;
-	
-	/**
-	 * 是否紧凑显示
-	 */
-	public void setCompacted(boolean compacted) {
-		mCompacted = compacted;
-	}
-
 	/**
 	 * 节点之间的最近距离
 	 */
-	public void setClosestSpace(int closestSpace) {
-		mClosestSpace = (closestSpace > 1) ? closestSpace : mClosestSpace;
+	private int mClosestSpace = 3; 
+	/**
+	 * 是否紧凑显示
+	 */
+	private boolean mCompacted = false;
+
+	/**
+	 * @param compacted 是否紧凑显示
+	 * @param closestSpace 节点之间的最近距离
+	 */
+	public void print(NodeOperation operation, 
+			boolean compacted,
+			int closestSpace) {
+		System.out.print(printString(operation, compacted, closestSpace));
 	}
 	
-	public void print( NodeOperation operation) {
-		System.out.print(printString(operation));
+	public void print(NodeOperation operation) {
+		print(operation, mCompacted, mClosestSpace);
+	}
+	
+	/**
+	 * @param compacted 是否紧凑显示
+	 * @param closestSpace 节点之间的最近距离
+	 */
+	public void println(NodeOperation operation, 
+			boolean compacted,
+			int closestSpace) {
+		print(operation, compacted, closestSpace);
+		System.out.println();
 	}
 	
 	public void println(NodeOperation operation) {
-		print(operation);
-		System.out.println();
+		println(operation, mCompacted, mClosestSpace);
+	}
+	
+	public synchronized String printString(NodeOperation operation) {
+		return printString(operation, mCompacted, mClosestSpace);
 	}
 	
 	/**
 	 * 生成二叉树的树状显示字符串
+	 * @param compacted 是否紧凑显示
+	 * @param closestSpace 节点之间的最近距离
 	 */
-	public synchronized String printString(NodeOperation operation) {
+	public synchronized String printString(NodeOperation operation, 
+			boolean compacted,
+			int closestSpace) {
 		if (operation == null || operation.root() == null) return null;
 		
 		// 初始化
+		mCompacted = compacted;
+		mClosestSpace = (closestSpace > 1) ? closestSpace : mClosestSpace;
 		mOperation = operation;
 		mRoot = new StringNode(operation.root());
 		mNodeLength = mRoot.mLength;
@@ -329,9 +351,22 @@ public class BinaryTreePrinter {
 	}
 	
 	public interface NodeOperation {
+		/**
+		 * who is the root node
+		 */
 		Object root();
+		/**
+		 * how to get the left child of the node
+		 */
 		Object left(Object node);
+		/**
+		 * how to get the right child of the node
+		 */
 		Object right(Object node);
+		/**
+		 * how to print the node
+		 */
+		Object string(Object node);
 	}
 
 	private class StringNode {
@@ -355,7 +390,7 @@ public class BinaryTreePrinter {
 		}
 		
 		public StringNode(Object node) {
-			this(node.toString());
+			this(mOperation.string(node).toString());
 			
 			mBtNode = node;
 		}

@@ -5,7 +5,7 @@
 ### 简介（Intro）
 - 树状打印一棵二叉树（Print a binary tree like a real tree）
 - 输入一棵二叉搜索树（Input a binary search tree）: 
-	-  [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
+  -  [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
 - 输出（Output）:
 ```shell
          7
@@ -19,10 +19,10 @@
 
 ### 示例（Example）
 - 先实现**NodeOperation**的相关操作(Implements NodeOperation)
-	- 根节点是谁？（Who is the root node?）
-	- 如何查找左节点？（How to get the left child?）
-	- 如何查找右节点？（How to get the right child?）
-    
+  - 根节点是谁？（Who is the root node?）
+  - 如何查找左节点？（How to get the left child?）
+  - 如何查找右节点？（How to get the right child?）
+  - 如何打印单个节点？（How to print a node?）
 ```java
 /**
 * BinarySearchTree是你自己的二叉树类
@@ -37,11 +37,6 @@ public class BinarySearchTree implements NodeOperation {
 		public E mElement;
 		public Node mLeft;
 		public Node mRight;
-		
-		@Override
-		public String toString() {
-			return mElement.toString();
-		}
 	}
 	
 	/********** NodeOperation **********/
@@ -65,6 +60,13 @@ public class BinarySearchTree implements NodeOperation {
 		// how to get the right child of the node?
 		return ((Node)node).mRight;
 	}
+
+	@Override
+	public Object string(Object node) {
+		// 如何打印单个节点？
+		// how to print the node?
+		return ((Node)node).mElement;
+	}
 	/********** NodeOperation **********/
 }
 
@@ -82,17 +84,15 @@ static BinarySearchTree<Integer> bst(Integer ints[]) {
 ```java
 // initialize a printer
 BinaryTreePrinter printer = new BinaryTreePrinter();
-// optional setting
-// printer.setCompacted(false);
-// printer.setClosestSpace(3);
 ```
-  
+
   - 打印(Print)
 ```java
 BinarySearchTree<Integer> bst1 = bst(new Integer[]{
 	7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12
 });
 printer.println(bst1);
+// printer.println(bst1, true, 3);
 /*
         7
       /   \
@@ -139,12 +139,12 @@ printer.println(bst(new Integer[]{
 - 也可以生成字符串写入文件(Write to file)
 ```java
 // also can write to file
-String filePath = "/Users/mj/Desktop/bst.txt";
 // String filePath = "C:/test/bst.txt";
+String filePath = "/Users/mj/Desktop/bst.txt";
 
 // generate print string
-String printString = printer.printString(bst1);
-Files.writeToFile(filePath, printString);
+String string = printer.printString(bst1);
+Files.writeToFile(filePath, string);
 ```
 
 - 甚至你还都不用定义二叉树类(Even you don't need to create a binary tree class)
@@ -171,6 +171,11 @@ printer.println(new NodeOperation() {
 		if (node.equals(3)) return 6;
 		if (node.equals(6)) return 7;
 		return null;
+	}
+	
+	@Override
+	public Object string(Object node) {
+		return node;
 	}
 });
 /*
@@ -205,6 +210,11 @@ printer.println(new NodeOperation() {
 		if (node.equals("Animal")) return "Dog";
 		if (node.equals("Dog")) return "SingleDog";
 		return null;
+	}
+	
+	@Override
+	public Object string(Object node) {
+		return node;
 	}
 });
 /*
