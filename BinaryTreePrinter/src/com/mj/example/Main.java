@@ -144,8 +144,7 @@ public class Main {
 	
 	static void tree3(BinaryTreePrinter printer) {
 		// also can write to file
-		// String filePath = "C:/test/bst.txt";
-		String filePath = "/Users/mj/Desktop/bst.txt";
+		String filePath = "F:/test/bst.txt";
 
 		// generate print string
 		String string = printer.treeString(bst(new Integer[]{

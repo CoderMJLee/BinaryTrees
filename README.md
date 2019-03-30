@@ -176,8 +176,7 @@ printer.println(bst(new Integer[]{
 - 也可以生成字符串写入文件(Write to file)
 ```java
 // also can write to file
-// String filePath = "C:/test/bst.txt";
-String filePath = "/Users/mj/Desktop/bst.txt";
+String filePath = "F:/test/bst.txt";
 
 // generate tree string
 String string = printer.treeString(bst(new Integer[]{
