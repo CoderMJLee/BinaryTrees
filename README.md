@@ -4,9 +4,9 @@
 ## BinaryTreePrinter
 ### 简介（Intro）
 - 树状打印一棵二叉树（Print a binary tree like a real tree）
-- 输入一棵二叉搜索树（Input a binary search tree）: 
+- 比如输入一棵二叉搜索树（For exampe, if you input a binary search tree）: 
   -  [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
-- 输出（Output）:
+- 就会输出（Output）:
 ```shell
          7
        /   \
