@@ -15,16 +15,11 @@ public class Main {
 		return bst;
 	}
 	
-	public static void main(String[] args) {
-		// initialize printer
-		BinaryTreePrinter printer = new BinaryTreePrinter();
-		
-		// print
-		BinarySearchTree<Integer> bst1 = bst(new Integer[]{
+	static void tree1(BinaryTreePrinter printer) {
+		BinarySearchTree<Integer> bst = bst(new Integer[]{
 				7,4,9,2,5,8,11,1,3,6,10,12
 			});
-		printer.println(bst1);
-//		printer.println(bst1, true, 3);
+		printer.treeln(bst);
 		/*
 		        7
 		      /   \
@@ -35,12 +30,24 @@ public class Main {
 		1   3   6   10  12
 		 */
 		
-		BinarySearchTree<Integer> bst2 = bst(new Integer[]{
+		// compacted, space is 3
+		// 紧凑显示，最小间距是3
+		printer.treeln(bst, true, 3);
+		/*
+		       7
+		     /   \
+		    4     9
+		   / \   / \
+		  2   5 8   11
+		 / \   \   /  \
+		1   3   6 10  12
+		 */
+		
+		printer.treeln(bst(new Integer[]{
 				381, 12, 410, 9, 40, 394, 540, 
 				35, 190, 476, 760, 146, 445,
 				600, 800
-			});
-		printer.println(bst2);
+			}));
 		/*
 		        381
 		      /     \
@@ -52,23 +59,11 @@ public class Main {
 		      /       /      /   \
 		    146     445    600   800
 		 */
-		
-		printer.println(bst(new Integer[]{
-				30, 10, 60, 5, 20, 40, 80,
-				15, 50, 70, 90
-			}));
-		/*
-		        30
-		     /      \
-		  10          60
-		 /  \       /    \
-		5    20   40      80
-		    /       \    /  \
-		  15        50  70  90
-		 */
-		
+	}
+	
+	static void tree2(BinaryTreePrinter printer) {
 		// other usage
-		printer.println(new NodeOperation() {
+		printer.treeln(new NodeOperation() {
 			@Override
 			public Object root() {
 				return 8;
@@ -107,7 +102,7 @@ public class Main {
 			  4   7   13
 		 */
 		
-		printer.println(new NodeOperation() {
+		printer.treeln(new NodeOperation() {
 			@Override
 			public Object root() {
 				return "Life";
@@ -145,13 +140,77 @@ public class Main {
 		     /     \
 		 Teddy   SingleDog
 		 */
-		
+	}
+	
+	static void tree3(BinaryTreePrinter printer) {
 		// also can write to file
 		// String filePath = "C:/test/bst.txt";
 		String filePath = "/Users/mj/Desktop/bst.txt";
 
 		// generate print string
-		String string = printer.printString(bst1);
+		String string = printer.treeString(bst(new Integer[]{
+				30, 10, 60, 5, 20, 40, 80,
+				15, 50, 70, 90
+			}));
 		Files.writeToFile(filePath, string);
+		/*
+		        30
+		     /      \
+		  10          60
+		 /  \       /    \
+		5    20   40      80
+		    /       \    /  \
+		  15        50  70  90
+		*/
+	}
+	
+	static void list(BinaryTreePrinter printer) {
+		BinarySearchTree<Integer> bst = bst(new Integer[]{
+				7,4,9,2,5,8,11,1,3,6,10,12
+			});
+		printer.listln(bst);
+		/*
+		7
+		├──── 9
+		│     ├──── 11
+		│     │     ├──── 12
+		│     │     └──── 10
+		│     └──── 8
+		└──── 4
+		      ├──── 5
+		      │     └───R 6
+		      └──── 2
+		            ├──── 3
+		            └──── 1
+		 */
+
+		// show left first, show directions
+		// 先显示左子树，再显示右子树。并且显示方向
+		printer.listln(bst, true, true);
+		/*
+		7
+		├───L 4
+		│     ├───L 2
+		│     │     ├───L 1
+		│     │     └───R 3
+		│     └───R 5
+		│           └───R 6
+		└───R 9
+		      ├───L 8
+		      └───R 11
+		            ├───L 10
+		            └───R 12
+		 */
+	}
+	
+	public static void main(String[] args) {
+		// initialize printer
+		BinaryTreePrinter printer = new BinaryTreePrinter();
+		
+		tree1(printer);
+		tree2(printer);
+		tree3(printer);
+		
+		list(printer);
 	}
 }

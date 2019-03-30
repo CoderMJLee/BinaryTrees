@@ -16,6 +16,32 @@
   / \   \     /  \
  1   3   6   10  12
 ```
+- 或者输出（Or output）
+```shell
+7
+├──── 9
+│     ├──── 11
+│     │     ├──── 12
+│     │     └──── 10
+│     └──── 8
+└──── 4
+      ├──── 5
+      │     └───R 6
+      └──── 2
+            ├──── 3
+            └──── 1
+```
+
+### 核心API（Core API）
+```java
+// 打印二叉树的树状显示
+public void treeln(NodeOperation operation);
+public void tree(NodeOperation operation);
+
+// 打印二叉树的列表显示
+public void listln(NodeOperation operation);
+public void list(NodeOperation operation);
+```
 
 ### 示例（Example）
 - 先实现**NodeOperation**的相关操作(Implements NodeOperation)
@@ -25,7 +51,7 @@
   - 如何打印单个节点？（How to print a node?）
 ```java
 /**
-* BinarySearchTree是你自己的二叉树类
+* BinarySearchTree是你自己编写的二叉树类
 * BinarySearchTree is a binary tree class that is created by yourself.
 */
 public class BinarySearchTree implements NodeOperation {
@@ -88,11 +114,10 @@ BinaryTreePrinter printer = new BinaryTreePrinter();
 
   - 打印(Print)
 ```java
-BinarySearchTree<Integer> bst1 = bst(new Integer[]{
+BinarySearchTree<Integer> bst = bst(new Integer[]{
 	7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12
 });
-printer.println(bst1);
-// printer.println(bst1, true, 3);
+printer.treeln(bst);
 /*
         7
       /   \
@@ -103,12 +128,24 @@ printer.println(bst1);
 1   3   6   10  12
 */
 
-BinarySearchTree<Integer> bst2 = bst(new Integer[]{
+// compacted, space is 3
+// 紧凑显示，最小间距是3
+printer.treeln(bst, true, 3);
+/*
+       7
+     /   \
+    4     9
+   / \   / \
+  2   5 8   11
+ / \   \   /  \
+1   3   6 10  12
+*/
+
+printer.treeln(bst(new Integer[]{
 	381, 12, 410, 9, 40, 394, 540, 
 	35, 190, 476, 760, 146, 445,
 	600, 800
-});
-printer.println(bst2);
+}));
 /*
         381
       /     \
@@ -142,14 +179,26 @@ printer.println(bst(new Integer[]{
 // String filePath = "C:/test/bst.txt";
 String filePath = "/Users/mj/Desktop/bst.txt";
 
-// generate print string
-String string = printer.printString(bst1);
+// generate tree string
+String string = printer.treeString(bst(new Integer[]{
+				30, 10, 60, 5, 20, 40, 80,
+				15, 50, 70, 90
+			}));
 Files.writeToFile(filePath, string);
+/*
+        30
+     /      \
+  10          60
+ /  \       /    \
+5    20   40      80
+    /       \    /  \
+  15        50  70  90
+*/
 ```
 
 - 甚至你还都不用定义二叉树类(Even you don't need to create a binary tree class)
 ```java
-printer.println(new NodeOperation() {
+printer.treeln(new NodeOperation() {
 	@Override
 	public Object root() {
 		return 8;
@@ -188,7 +237,7 @@ printer.println(new NodeOperation() {
   4   7   13
 */
 
-printer.println(new NodeOperation() {
+printer.treeln(new NodeOperation() {
 	@Override
 	public Object root() {
 		return "Life";
@@ -226,4 +275,43 @@ Cat    Dog    Man    Woman
      /     \
  Teddy   SingleDog
 */
+```
+- 列表形式打印
+```java
+BinarySearchTree<Integer> bst = bst(new Integer[]{
+		7,4,9,2,5,8,11,1,3,6,10,12
+	});
+printer.listln(bst);
+/*
+7
+├──── 9
+│     ├──── 11
+│     │     ├──── 12
+│     │     └──── 10
+│     └──── 8
+└──── 4
+      ├──── 5
+      │     └───R 6
+      └──── 2
+            ├──── 3
+            └──── 1
+ */
+ 
+ // show left first, show directions
+// 先显示左子树，再显示右子树。并且显示方向
+printer.listln(bst, true, true);
+/*
+7
+├───L 4
+│     ├───L 2
+│     │     ├───L 1
+│     │     └───R 3
+│     └───R 5
+│           └───R 6
+└───R 9
+      ├───L 8
+      └───R 11
+            ├───L 10
+            └───R 12
+ */
 ```
