@@ -9,10 +9,10 @@ import java.util.Queue;
 import java.util.Stack;
 
 /**
- * 输入一棵二叉搜索树（input a binary search tree）: 
+ * 如果输入一棵二叉搜索树（input a binary search tree）: 
  * [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
  * 
- * 输出（output）:
+ * 那么输出（output）:
  *	        7
  *	      /   \
  *	    4       9
@@ -253,8 +253,8 @@ public class BinaryTreePrinter {
 						if ((mLeftFirst && pParent.mLeft == parent 
 								&& pParent.mRight != null)
 								|| 
-								!mLeftFirst && pParent.mRight == parent 
-								&& pParent.mLeft != null) {
+								(!mLeftFirst && pParent.mRight == parent 
+								&& pParent.mLeft != null)) {
 							sb.append(MIDDLE);
 						} else {
 							sb.append(Strings.BLANK);
