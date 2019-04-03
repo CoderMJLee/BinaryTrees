@@ -228,11 +228,14 @@ public class BinaryTreePrinter {
 			@Override
 			public String toString() {
 				ListPrinter printer = mPrinter.get();
+				boolean leftFirst = printer.mLeftFirst;
+				boolean showDirections = printer.mShowDirections;
+				NodeOperation operation = printer.mPrinter.get().mOperation;
 				StringBuilder sb = new StringBuilder();
 				int level = mLevel;
 				while (level-- > 0) {
 					if (level == 0) {
-						Node node = printer.mLeftFirst ? mParent.mRight 
+						Node node = leftFirst ? mParent.mRight 
 								: mParent.mLeft;
 						if (this == node || node == null) {
 							sb.append(LAST);
@@ -242,11 +245,11 @@ public class BinaryTreePrinter {
 						sb.append(Strings.repeat(LINE, LINE_COUNT - 1));
 						if (this == mParent.mLeft 
 								&& (mParent.mRight == null 
-								|| printer.mShowDirections)) {
+								|| showDirections)) {
 							sb.append(LEFT);
 						} else if (this == mParent.mRight 
 								&& (mParent.mLeft == null 
-								|| printer.mShowDirections)) {
+								|| showDirections)) {
 							sb.append(RIGHT);
 						} else {
 							sb.append(LINE);
@@ -257,10 +260,10 @@ public class BinaryTreePrinter {
 							parent = parent.mParent;
 						}
 						Node pParent = parent.mParent;
-						if ((printer.mLeftFirst && pParent.mLeft == parent 
+						if ((leftFirst && pParent.mLeft == parent 
 								&& pParent.mRight != null)
 								|| 
-								(!printer.mLeftFirst && pParent.mRight == parent 
+								(!leftFirst && pParent.mRight == parent 
 								&& pParent.mLeft != null)) {
 							sb.append(MIDDLE);
 						} else {
@@ -271,7 +274,7 @@ public class BinaryTreePrinter {
 					sb.append(Strings.BLANK);
 				}
 
-				sb.append(printer.mPrinter.get().mOperation.string(mBtNode));
+				sb.append(operation.string(mBtNode));
 				return sb.toString();
 			}
 		}
@@ -315,8 +318,6 @@ public class BinaryTreePrinter {
 		 */
 		@Override
 		public String toString() {
-			if (mPrinter.get().mOperation == null || mRoot == null) return null;
-			
 			// nodes用来存放所有的节点
 			List<List<Node>> nodes = new ArrayList<>();
 			fillNodes(nodes);
@@ -366,7 +367,7 @@ public class BinaryTreePrinter {
 		 */
 		private void fillNodes(List<List<Node>> nodes) {
 			if (nodes == null) return;
-			BinaryTreePrinter printer = mPrinter.get();
+			NodeOperation operation = mPrinter.get().mOperation;
 			
 			// 第一行
 			List<Node> firstRowNodes = new ArrayList<>();
@@ -384,14 +385,14 @@ public class BinaryTreePrinter {
 						rowNodes.add(null);
 						rowNodes.add(null);
 					} else {
-						Node left = addNode(rowNodes, printer.mOperation.left(node.mBtNode));
+						Node left = addNode(rowNodes, operation.left(node.mBtNode));
 						if (left != null) {
 							node.mLeft = left;
 							left.mParent = node;
 							notNull = true;
 						}
 						
-						Node right = addNode(rowNodes, printer.mOperation.right(node.mBtNode));
+						Node right = addNode(rowNodes, operation.right(node.mBtNode));
 						if (right != null) {
 							node.mRight = right;
 							right.mParent = node;
@@ -602,7 +603,8 @@ public class BinaryTreePrinter {
 			
 			public Node(TreePrinter printer, Object node) {
 				mPrinter = new WeakReference<>(printer);
-				init(printer.mPrinter.get().mOperation.string(node).toString());
+				NodeOperation operation = printer.mPrinter.get().mOperation;
+				init(operation.string(node).toString());
 				
 				mBtNode = node;
 			}
