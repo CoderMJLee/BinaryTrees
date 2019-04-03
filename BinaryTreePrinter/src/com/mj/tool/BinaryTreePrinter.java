@@ -1,5 +1,6 @@
 package com.mj.tool;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -72,7 +73,7 @@ public class BinaryTreePrinter {
 			Integer closestSpace) {
 		if (operation == null || operation.root() == null) return null;
 		mOperation = operation;
-		return new TreePrinter(compacted, closestSpace).toString();
+		return new TreePrinter(this, compacted, closestSpace).toString();
 	}
 	
 	public void tree(NodeOperation operation) {
@@ -128,7 +129,7 @@ public class BinaryTreePrinter {
 		if (operation == null || operation.root() == null) return null;
 		mOperation = operation;
 		
-		return new ListPrinter(leftFirst, showDirections).toString();
+		return new ListPrinter(this, leftFirst, showDirections).toString();
 	}
 	
 	public interface NodeOperation {
@@ -150,7 +151,8 @@ public class BinaryTreePrinter {
 		Object string(Object node);
 	}
 	
-	private class ListPrinter {
+	private static class ListPrinter {
+		private WeakReference<BinaryTreePrinter> mPrinter;
 		/**
 		 * 是否先显示左子树，再显示右子树
 		 */
@@ -160,7 +162,8 @@ public class BinaryTreePrinter {
 		 */
 		private boolean mShowDirections;
 		
-		public ListPrinter(Boolean leftFirst, Boolean showDirections) {
+		public ListPrinter(BinaryTreePrinter printer, Boolean leftFirst, Boolean showDirections) {
+			mPrinter = new WeakReference<>(printer);
 			mLeftFirst = (leftFirst == null) ? false : leftFirst;
 			mShowDirections = (showDirections == null) ? false : leftFirst;
 		}
@@ -168,30 +171,31 @@ public class BinaryTreePrinter {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
+			BinaryTreePrinter printer = mPrinter.get();
 			
 			Stack<Node> stack = new Stack<>();
-			stack.push(new Node(mOperation.root(), null));
+			stack.push(new Node(this, printer.mOperation.root(), null));
 			
 			while (!stack.isEmpty()) {
 				Node node = stack.pop();
 				sb.append(node.toString());
 				sb.append("\n");
 
-				Object left = mOperation.left(node.mBtNode);
-				Object right = mOperation.right(node.mBtNode);
+				Object left = printer.mOperation.left(node.mBtNode);
+				Object right = printer.mOperation.right(node.mBtNode);
 				if (mLeftFirst) {
 					if (right != null) {
-						stack.push(node.mRight = new Node(right, node));
+						stack.push(node.mRight = new Node(this, right, node));
 					}
 					if (left != null) {
-						stack.push(node.mLeft = new Node(left, node));
+						stack.push(node.mLeft = new Node(this, left, node));
 					}
 				} else {
 					if (left != null) {
-						stack.push(node.mLeft = new Node(left, node));
+						stack.push(node.mLeft = new Node(this, left, node));
 					}
 					if (right != null) {
-						stack.push(node.mRight = new Node(right, node));
+						stack.push(node.mRight = new Node(this, right, node));
 					}
 				}
 			}
@@ -199,7 +203,8 @@ public class BinaryTreePrinter {
 			return sb.toString();
 		}
 		
-		private class Node {
+		private static class Node {
+			private WeakReference<ListPrinter> mPrinter;
 			public Object mBtNode;
 			public int mLevel;
 			public Node mLeft;
@@ -213,7 +218,8 @@ public class BinaryTreePrinter {
 			private static final String FIRST = "├";
 			private static final String MIDDLE = "│";
 			
-			public Node(Object node, Node parent) {
+			public Node(ListPrinter printer, Object node, Node parent) {
+				mPrinter = new WeakReference<>(printer);
 				mBtNode = node;
 				mParent = parent;
 				mLevel = (parent == null) ? 0 : (parent.mLevel + 1);
@@ -221,11 +227,12 @@ public class BinaryTreePrinter {
 			
 			@Override
 			public String toString() {
+				ListPrinter printer = mPrinter.get();
 				StringBuilder sb = new StringBuilder();
 				int level = mLevel;
 				while (level-- > 0) {
 					if (level == 0) {
-						Node node = mLeftFirst ? mParent.mRight 
+						Node node = printer.mLeftFirst ? mParent.mRight 
 								: mParent.mLeft;
 						if (this == node || node == null) {
 							sb.append(LAST);
@@ -235,11 +242,11 @@ public class BinaryTreePrinter {
 						sb.append(Strings.repeat(LINE, LINE_COUNT - 1));
 						if (this == mParent.mLeft 
 								&& (mParent.mRight == null 
-								|| mShowDirections)) {
+								|| printer.mShowDirections)) {
 							sb.append(LEFT);
 						} else if (this == mParent.mRight 
 								&& (mParent.mLeft == null 
-								|| mShowDirections)) {
+								|| printer.mShowDirections)) {
 							sb.append(RIGHT);
 						} else {
 							sb.append(LINE);
@@ -250,10 +257,10 @@ public class BinaryTreePrinter {
 							parent = parent.mParent;
 						}
 						Node pParent = parent.mParent;
-						if ((mLeftFirst && pParent.mLeft == parent 
+						if ((printer.mLeftFirst && pParent.mLeft == parent 
 								&& pParent.mRight != null)
 								|| 
-								(!mLeftFirst && pParent.mRight == parent 
+								(!printer.mLeftFirst && pParent.mRight == parent 
 								&& pParent.mLeft != null)) {
 							sb.append(MIDDLE);
 						} else {
@@ -264,13 +271,14 @@ public class BinaryTreePrinter {
 					sb.append(Strings.BLANK);
 				}
 
-				sb.append(mOperation.string(mBtNode));
+				sb.append(printer.mPrinter.get().mOperation.string(mBtNode));
 				return sb.toString();
 			}
 		}
 	}
 	
-	private class TreePrinter {
+	private static class TreePrinter {
+		private WeakReference<BinaryTreePrinter> mPrinter;
 		private static final String LEFT_LINE = "/"; 
 		private static final String RIGHT_LINE = "\\"; 
 		private static final int NODE_SPACE = 2; 
@@ -289,13 +297,14 @@ public class BinaryTreePrinter {
 		 */
 		private boolean mCompacted;
 		
-		public TreePrinter(Boolean compacted,
+		public TreePrinter(BinaryTreePrinter printer, Boolean compacted,
 				Integer closestSpace) {
+			mPrinter = new WeakReference<>(printer);
 			// 初始化
 			mCompacted = (compacted == null) ? mCompacted : compacted;
 			mClosestSpace = (closestSpace != null && closestSpace > 1) 
 					? closestSpace : mClosestSpace;
-			mRoot = new Node(mOperation.root());
+			mRoot = new Node(this, printer.mOperation.root());
 			mMaxLength = mRoot.mLength;
 		}
 		
@@ -306,7 +315,7 @@ public class BinaryTreePrinter {
 		 */
 		@Override
 		public String toString() {
-			if (mOperation == null || mRoot == null) return null;
+			if (mPrinter.get().mOperation == null || mRoot == null) return null;
 			
 			// nodes用来存放所有的节点
 			List<List<Node>> nodes = new ArrayList<>();
@@ -343,7 +352,7 @@ public class BinaryTreePrinter {
 		private Node addNode(List<Node> nodes, Object btNode) {
 			Node node = null;
 			if (btNode != null) {
-				node = new Node(btNode);
+				node = new Node(this, btNode);
 				mMaxLength = Math.max(mMaxLength, node.mLength);
 				nodes.add(node);
 			} else {
@@ -357,6 +366,8 @@ public class BinaryTreePrinter {
 		 */
 		private void fillNodes(List<List<Node>> nodes) {
 			if (nodes == null) return;
+			BinaryTreePrinter printer = mPrinter.get();
+			
 			// 第一行
 			List<Node> firstRowNodes = new ArrayList<>();
 			firstRowNodes.add(mRoot);
@@ -373,14 +384,14 @@ public class BinaryTreePrinter {
 						rowNodes.add(null);
 						rowNodes.add(null);
 					} else {
-						Node left = addNode(rowNodes, mOperation.left(node.mBtNode));
+						Node left = addNode(rowNodes, printer.mOperation.left(node.mBtNode));
 						if (left != null) {
 							node.mLeft = left;
 							left.mParent = node;
 							notNull = true;
 						}
 						
-						Node right = addNode(rowNodes, mOperation.right(node.mBtNode));
+						Node right = addNode(rowNodes, printer.mOperation.right(node.mBtNode));
 						if (right != null) {
 							node.mRight = right;
 							right.mParent = node;
@@ -506,7 +517,7 @@ public class BinaryTreePrinter {
 				Node childNode, String line) {
 			if (childNode == null) return null;
 			
-			Node lineNode = new Node(line);
+			Node lineNode = new Node(this, line);
 			lineNodes.add(lineNode);
 
 			/**** 这一段暂时没啥用 ****/
@@ -562,7 +573,9 @@ public class BinaryTreePrinter {
 			nodes.addAll(newNodes);
 		}
 		
-		private class Node {
+		private static class Node {
+			@SuppressWarnings("unused")
+			private WeakReference<TreePrinter> mPrinter;
 			public Object mBtNode;
 			public Node mLeft;
 			public Node mRight;
@@ -574,7 +587,7 @@ public class BinaryTreePrinter {
 			public String mString;
 			public int mLength;
 			
-			public Node(String string) {
+			private void init(String string) {
 				string = (string == null) ? "null" : string;
 				string = string.isEmpty() ? " " : string;
 				
@@ -582,8 +595,14 @@ public class BinaryTreePrinter {
 				mString = string;
 			}
 			
-			public Node(Object node) {
-				this(mOperation.string(node).toString());
+			public Node(TreePrinter printer, String string) {
+				mPrinter = new WeakReference<>(printer);
+				init(string);
+			}
+			
+			public Node(TreePrinter printer, Object node) {
+				mPrinter = new WeakReference<>(printer);
+				init(printer.mPrinter.get().mOperation.string(node).toString());
 				
 				mBtNode = node;
 			}
@@ -665,7 +684,7 @@ public class BinaryTreePrinter {
 			}
 		}
 		
-		private class LevelMeta {
+		private static class LevelMeta {
 			public int mLeftX;
 			public int mRightX;
 			public LevelMeta(int mLeftX, int mRightX) {
