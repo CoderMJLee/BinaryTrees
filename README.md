@@ -7,10 +7,12 @@
 - 比如输入一棵二叉搜索树（For exampe, if you input a binary search tree）: 
   -  [381, 12, 410, 9, 40, 394, 540, 35, 190, 476, 760, 146, 445, 600, 800]
 - 就会输出（Output）:
-  ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094223007-512106824.png)
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094223007-512106824.png)
 
 - 或者输出（Or output）
-  ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094237106-573651641.png)
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094237106-573651641.png)
 
 ### 核心API（Core API）
 ```java
