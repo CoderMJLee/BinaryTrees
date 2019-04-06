@@ -5,46 +5,38 @@
 ### 简介（Intro）
 - 树状打印一棵二叉树（Print a binary tree like a real tree）
 - 比如输入一棵二叉搜索树（For exampe, if you input a binary search tree）: 
-  -  [7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12]
+  -  [381, 12, 410, 9, 40, 394, 540, 35, 190, 476, 760, 146, 445, 600, 800]
 - 就会输出（Output）:
-```shell
-         7
-       /   \
-     4       9
-    / \     / \
-   2   5   8   11
-  / \   \     /  \
- 1   3   6   10  12
-```
+  ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094223007-512106824.png)
+
 - 或者输出（Or output）
-```shell
-7
-├──── 9
-│     ├──── 11
-│     │     ├──── 12
-│     │     └──── 10
-│     └──── 8
-└──── 4
-      ├──── 5
-      │     └───R 6
-      └──── 2
-            ├──── 3
-            └──── 1
-```
+  ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406094237106-573651641.png)
 
 ### 核心API（Core API）
 ```java
-// 打印二叉树的树状显示
-public void treeln(NodeOperation operation);
-public void tree(NodeOperation operation);
+public final class BinaryTrees {
+	// 打印一棵二叉树
+	public static void print(BinaryTreeInfo tree);
+	public static void print(BinaryTreeInfo tree, PrintStyle style);
 
-// 打印二叉树的列表显示
-public void listln(NodeOperation operation);
-public void list(NodeOperation operation);
+	// 打印一棵二叉树（打印完自动换行）
+	public static void println(BinaryTreeInfo tree);
+	public static void println(BinaryTreeInfo tree, PrintStyle style);
+
+	// 获得一棵二叉树的打印字符串
+	public static String printString(BinaryTreeInfo tree);
+	public static String printString(BinaryTreeInfo tree, PrintStyle style);
+
+	// 可选的打印样式
+	public enum PrintStyle {
+		LEVEL_ORDER, 
+		INORDER
+	}
+}
 ```
 
 ### 示例（Example）
-- 先实现**NodeOperation**的相关操作(Implements NodeOperation)
+- 先实现**BinaryTreeInfo**的相关操作(Implements BinaryTreeInfo)
   - 根节点是谁？（Who is the root node?）
   - 如何查找左节点？（How to get the left child?）
   - 如何查找右节点？（How to get the right child?）
@@ -54,150 +46,72 @@ public void list(NodeOperation operation);
 * BinarySearchTree是你自己编写的二叉树类
 * BinarySearchTree is a binary tree class that is created by yourself.
 */
-public class BinarySearchTree implements NodeOperation {
+public class BinarySearchTree<E> implements BinaryTreeInfo {
 	/**这里省略了大量代码，只贴出了脉络代码**/
 	/** only show some main code **/
 	
-	private Node mRoot;
-	private class Node {
-		public E mElement;
-		public Node mLeft;
-		public Node mRight;
+	private Node<E> root;
+	private static class Node<E> {
+		E element;
+		Node<E> left;
+		Node<E> right;
 	}
 	
-	/********** NodeOperation **********/
+	/********** BinaryTreeInfo **********/
 	@Override
 	public Object root() {
 		// 根节点是谁？
 		// who is the root node?
-		return mRoot;
+		return root;
 	}
 
 	@Override
 	public Object left(Object node) {
 		// 如何查找左节点？
 		// how to get the left child of the node?
-		return ((Node)node).mLeft;
+		return ((Node)node).left;
 	}
 
 	@Override
 	public Object right(Object node) {
 		// 如何查找右节点？
 		// how to get the right child of the node?
-		return ((Node)node).mRight;
+		return ((Node)node).right;
 	}
 
 	@Override
 	public Object string(Object node) {
 		// 如何打印单个节点？
 		// how to print the node?
-		return ((Node)node).mElement;
+		return ((Node)node).element;
 	}
-	/********** NodeOperation **********/
-}
-
-static BinarySearchTree<Integer> bst(Integer ints[]) {
-	if (ints == null) return null;
-	BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
-	for (Integer integer : ints) {
-		bst.add(integer);
-	}
-	return bst;
+	/********** BinaryTreeInfo **********/
 }
 ```
 
-- 初始化**BinaryTreePrinter**
+- 打印(Print)
 ```java
-// initialize a printer
-BinaryTreePrinter printer = new BinaryTreePrinter();
+// 随机生成的一棵二叉搜索树（random generation）
+BinarySearchTree<Integer> bst = ...;
+
+// PrintStyle.LEVEL_ORDER（层序打印）
+BinaryTrees.println(bst); 
+
+// PrintStyle.INORDER（中序打印）
+BinaryTrees.println(bst, PrintStyle.INORDER);
 ```
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100039427-2136203746.png)
 
-  - 打印(Print)
-```java
-BinarySearchTree<Integer> bst = bst(new Integer[]{
-	7, 4, 9, 2, 5, 8, 11, 1, 3, 6, 10, 12
-});
-printer.treeln(bst);
-/*
-        7
-      /   \
-    4       9
-   / \     / \
-  2   5   8   11
- / \   \     /  \
-1   3   6   10  12
-*/
-
-// compacted, space is 3
-// 紧凑显示，最小间距是3
-printer.treeln(bst, true, 3);
-/*
-       7
-     /   \
-    4     9
-   / \   / \
-  2   5 8   11
- / \   \   /  \
-1   3   6 10  12
-*/
-
-printer.treeln(bst(new Integer[]{
-	381, 12, 410, 9, 40, 394, 540, 
-	35, 190, 476, 760, 146, 445,
-	600, 800
-}));
-/*
-        381
-      /     \
-  12           410
- /  \         /   \
-9    40     394   540
-    /  \         /   \
- 35    190    476     760
-      /       /      /   \
-    146     445    600   800
-*/
-
-printer.println(bst(new Integer[]{
-	30, 10, 60, 5, 20, 40, 80,
-	15, 50, 70, 90
-}));
-/*
-        30
-     /      \
-  10          60
- /  \       /    \
-5    20   40      80
-    /       \    /  \
-  15        50  70  90
-*/
-```
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100052330-1750592401.png)
 
 - 也可以生成字符串写入文件(Write to file)
 ```java
-// also can write to file
-String filePath = "F:/test/bst.txt";
-
-// generate tree string
-String string = printer.treeString(bst(new Integer[]{
-				30, 10, 60, 5, 20, 40, 80,
-				15, 50, 70, 90
-			}));
-Files.writeToFile(filePath, string);
-/*
-        30
-     /      \
-  10          60
- /  \       /    \
-5    20   40      80
-    /       \    /  \
-  15        50  70  90
-*/
+Files.writeToFile("F:/test/bst.txt", BinaryTrees.printString(bst));
 ```
 
 - 甚至你还都不用定义二叉树类(Even you don't need to create a binary tree class)
 ```java
-printer.treeln(new NodeOperation() {
+BinaryTrees.println(new BinaryTreeInfo() {
 	@Override
 	public Object root() {
 		return 8;
@@ -226,17 +140,8 @@ printer.treeln(new NodeOperation() {
 		return node;
 	}
 });
-/*
-      8
-    /   \
-  3       10
- / \        \
-1   6       14
-   / \      /
-  4   7   13
-*/
 
-printer.treeln(new NodeOperation() {
+BinaryTrees.println(new BinaryTreeInfo() {
 	@Override
 	public Object root() {
 		return "Life";
@@ -265,52 +170,7 @@ printer.treeln(new NodeOperation() {
 		return node;
 	}
 });
-/*
-          Life
-        /      \
-  Animal        Person
-   /  \         /    \
-Cat    Dog    Man    Woman
-     /     \
- Teddy   SingleDog
-*/
 ```
-- 列表形式打印
-```java
-BinarySearchTree<Integer> bst = bst(new Integer[]{
-		7,4,9,2,5,8,11,1,3,6,10,12
-	});
-printer.listln(bst);
-/*
-7
-├──── 9
-│     ├──── 11
-│     │     ├──── 12
-│     │     └──── 10
-│     └──── 8
-└──── 4
-      ├──── 5
-      │     └───R 6
-      └──── 2
-            ├──── 3
-            └──── 1
- */
- 
- // show left first, show directions
-// 先显示左子树，再显示右子树。并且显示方向
-printer.listln(bst, true, true);
-/*
-7
-├───L 4
-│     ├───L 2
-│     │     ├───L 1
-│     │     └───R 3
-│     └───R 5
-│           └───R 6
-└───R 9
-      ├───L 8
-      └───R 11
-            ├───L 10
-            └───R 12
- */
-```
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100247015-1301544281.png)
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100252563-950745142.png)

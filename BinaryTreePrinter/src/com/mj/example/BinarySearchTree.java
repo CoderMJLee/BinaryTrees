@@ -2,10 +2,10 @@ package com.mj.example;
 
 import java.util.Comparator;
 
-import com.mj.tool.BinaryTreePrinter.NodeOperation;
+import com.mj.printer.BinaryTreeInfo;
 
 @SuppressWarnings("unchecked")
-public class BinarySearchTree<E> implements NodeOperation {
+public class BinarySearchTree<E> implements BinaryTreeInfo {
 	private Comparator<E> mComparator;
 	private Node mRoot;
 	private int mSize;
@@ -75,7 +75,7 @@ public class BinarySearchTree<E> implements NodeOperation {
 		}
 	}
 
-	/********** NodeOperation **********/
+	/********** BinaryTreeInfo **********/
 	@Override
 	public Object root() {
 		return mRoot;
@@ -95,5 +95,5 @@ public class BinarySearchTree<E> implements NodeOperation {
 	public Object string(Object node) {
 		return ((Node)node).mElement;
 	}
-	/********** NodeOperation **********/
+	/********** BinaryTreeInfo **********/
 }
