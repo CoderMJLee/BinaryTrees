@@ -6,15 +6,15 @@ import com.mj.printer.BinaryTreeInfo;
 
 @SuppressWarnings("unchecked")
 public class BinarySearchTree<E> implements BinaryTreeInfo {
-	private Comparator<E> mComparator;
-	private Node mRoot;
-	private int mSize;
+	private Comparator<E> comparator;
+	private Node root;
+	private int size;
 	
 	public BinarySearchTree() {
 	}
 	
 	public BinarySearchTree(Comparator<E> comparator) {
-		mComparator = comparator;
+		this.comparator = comparator;
 	}
 	
 	public void add(E element) {
@@ -22,78 +22,78 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 			throw new IllegalArgumentException("element must be not null");
 		}
 		
-		if (mRoot == null) {
-			mRoot = new Node(element, null);
-			mSize++;
+		if (root == null) {
+			root = new Node(element, null);
+			size++;
 			return;
 		}
 		
-		Node parent = mRoot;
-		Node node = mRoot;
+		Node parent = root;
+		Node node = root;
 		int cmp = 0;
 		while (node != null) {
-			cmp = compare(element, node.mElement);
+			cmp = compare(element, node.element);
 			parent = node;
 			if (cmp > 0) {
-				node = node.mRight;
+				node = node.right;
 			} else if (cmp < 0) {
-				node = node.mLeft;
+				node = node.left;
 			} else {
-				node.mElement = element;
+				node.element = element;
 				return;
 			}
 		}
 		
 		Node newNode = new Node(element, parent);
 		if (cmp > 0) {
-			parent.mRight = newNode;
+			parent.right = newNode;
 		} else {
-			parent.mLeft = newNode;
+			parent.left = newNode;
 		}
-		mSize++;
+		size++;
 	}
 	
 	/**
 	 * 比较两个元素的大小
 	 */
 	private int compare(E e1, E e2) {
-		return (mComparator != null) 
-				? mComparator.compare(e1, e2) 
+		return (comparator != null) 
+				? comparator.compare(e1, e2) 
 						: ((Comparable<E>)e1).compareTo(e2);
 	}
 
 	private class Node {
-		public E mElement;
-		public Node mLeft;
-		public Node mRight;
+		public E element;
+		public Node left;
+		public Node right;
 		@SuppressWarnings("unused")
-		public Node mParent;
+		public Node parent;
 		
 		public Node(E element, Node parent) {
-			mElement = element;
-			mParent = parent;
+			this.element = element;
+			this.parent = parent;
 		}
 	}
 
 	/********** BinaryTreeInfo **********/
 	@Override
 	public Object root() {
-		return mRoot;
+		return root;
 	}
 
 	@Override
 	public Object left(Object node) {
-		return ((Node)node).mLeft;
+		return ((Node)node).left;
 	}
 
 	@Override
 	public Object right(Object node) {
-		return ((Node)node).mRight;
+		return ((Node)node).right;
 	}
 
 	@Override
 	public Object string(Object node) {
-		return ((Node)node).mElement;
+		return ((Node)node).element;
 	}
 	/********** BinaryTreeInfo **********/
 }

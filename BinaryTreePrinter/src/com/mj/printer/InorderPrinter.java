@@ -1,5 +1,26 @@
 package com.mj.printer;
 
+/**
+
+             ┌──800
+         ┌──760
+         │   └──600
+     ┌──540
+     │   └──476
+     │       └──445
+ ┌──410
+ │   └──394
+381
+ │     ┌──190
+ │     │   └──146
+ │  ┌──40
+ │  │  └──35
+ └──12
+    └──9
+ 
+ * @author MJ Lee
+ *
+ */
 public class InorderPrinter extends Printer {
 	private static String rightAppend;
 	private static String leftAppend;
