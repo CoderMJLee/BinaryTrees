@@ -102,9 +102,10 @@ BinaryTrees.println(bst);
 // PrintStyle.INORDER（中序打印）
 BinaryTrees.println(bst, PrintStyle.INORDER);
 ```
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100039427-2136203746.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100052330-1750592401.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406111607906-1148747309.png)
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406111614353-1717134516.png)
 
 - 也可以生成字符串写入文件(Write to file)
 ```java
