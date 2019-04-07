@@ -5,6 +5,12 @@ h3{
     margin: 0;
 }
 
+input,
+button,
+textarea {
+    outline: none;
+}
+
 #paper {
     border: 2px solid #000;
     position: absolute;
@@ -22,12 +28,21 @@ h3{
     resize: none;
     width: 330px;
     height: 100px;
-    border: 1px dashed #000;
     margin-bottom: 10px;
 }
 
 #controls input[type="text"] {
     width: 135px;
+}
+
+#controls input[type="text"],
+#controls textarea {
+    border: 1px dashed #000;
+}
+
+#controls input[type="text"]:focus,
+#controls textarea:focus {
+    border-color: red;
 }
 
 #controls input[type="button"] {
@@ -41,5 +56,4 @@ h3{
     cursor: pointer;
     margin-right: 10px;
     margin-bottom: 10px;
-    outline: none;
 }

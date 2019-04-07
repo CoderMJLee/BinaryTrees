@@ -13,7 +13,9 @@ Ext.define('MJ.Graph', {
         FONT_FAMILY: 'Consolas',
         X_SPACE: 10,
         Y_SPACE: 30,
-        LINE_WIDTH: 30
+        LINE_WIDTH: 30,
+        LINK_TYPE_ELBOW: 'elbow',
+        LINK_TYPE_LINE: 'line'
     },
     config: {
         // MJ.BinaryTreeInfo
@@ -26,19 +28,19 @@ Ext.define('MJ.Graph', {
         minX: 0,
         paperWidth: 0,
         paperHeight: 0,
-        paper: null
+        paper: null,
+        // elbow\line
+        linkType: null
     },
     constructor: function (cfg) {
         this.initConfig(cfg);
     },
     display: function () {
-        if (!this.tree) {
+        var btRoot = this.tree ? this.tree.getRoot() : null;
+        if (!btRoot) {
             $('#paper svg').empty();
             return;
         }
-
-        var btRoot = this.tree.getRoot();
-        if (!btRoot) return;
 
         this.root = new MJ.Graph.Node({
             string: this.tree.getString(btRoot),
@@ -266,15 +268,13 @@ Ext.define('MJ.Graph', {
         link.source(node.parent.cell, {
             anchor: { name: parentAnchor }
         });
-
-        link.router('orthogonal', {
-            padding: 10
-        });
-        link.connector('jumpover');
-        // link.vertices(
-        //     [
-        //         new g.Point(node.x, node.parent.y + (node.parent.height >> 1))
-        //     ]);
+        if (!this.linkType ||
+            this.linkType === MJ.Graph.LINK_TYPE_ELBOW) {
+            link.router('orthogonal', {
+                padding: 10
+            });
+            link.connector('jumpover');
+        }
         link.target(rect, {
             anchor: { name: 'top' }
         });

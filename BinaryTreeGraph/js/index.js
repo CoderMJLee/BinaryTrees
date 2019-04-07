@@ -9,34 +9,36 @@ Ext.define('MJ.Demo', {
     statics: {
         randomMaxCount: 20,
         randomMaxValue: 100,
-        graph: null,
-        getTree: function () {
-            if (MJ.Demo.graph) {
-                return MJ.Demo.graph.tree;
-            } else {
-                var bst = new MJ.BinarySearchTree();
-                MJ.Demo.graph = new MJ.Graph({tree: bst});
-                return bst;
-            }
-        }
+        tree: new MJ.BinarySearchTree()
     }
 });
+
+function display() {
+    var linkType = MJ.Graph.LINK_TYPE_ELBOW;
+    if ($('#line').is(':checked')) {
+        linkType = MJ.Graph.LINK_TYPE_LINE;
+    }
+    new MJ.Graph({
+        tree: MJ.Demo.tree,
+        linkType: linkType
+    }).display();
+}
 
 function initHtml() {
     var $textarea = $('#controls textarea');
     var left = $textarea.offset().left + $textarea.width() + 20;
+
     $('#paper')
         .css('left', left + 'px')
         .css('top', '10px');
 
     $('#show').click(function () {
         var eles = $('#data').val().split(/\D+/i);
-        var bst = MJ.Demo.getTree();
-        bst.clear();
+        MJ.Demo.tree.clear();
         for (var i in eles) {
-            bst.add(parseInt(eles[i].trim()));
+            MJ.Demo.tree.add(parseInt(eles[i].trim()));
         }
-        MJ.Demo.graph.display();
+        display();
     });
 
     $('#random').click(function () {
@@ -61,27 +63,27 @@ function initHtml() {
             }
             text += 1 + Math.floor(Math.random()*value);
         }
-        MJ.log(count, value, text);
         $textarea.val(text);
     });
 
     $('#add').click(function () {
         var eles = $('#data').val().split(/\D+/i);
-        var bst = MJ.Demo.getTree();
         for (var i in eles) {
-            bst.add(parseInt(eles[i].trim()));
+            MJ.Demo.tree.add(parseInt(eles[i].trim()));
         }
-        MJ.Demo.graph.display();
+        display();
     });
 
     $('#remove').click(function () {
         var eles = $('#data').val().split(/\D+/i);
-        var bst = MJ.Demo.getTree();
         for (var i in eles) {
-            bst.remove(parseInt(eles[i].trim()));
+            MJ.Demo.tree.remove(parseInt(eles[i].trim()));
         }
-        MJ.Demo.graph.display();
+        display();
     });
+
+    $('#elbow').click(display);
+    $('#line').click(display);
 }
 
 /**
@@ -95,8 +97,6 @@ function example1() {
     }
     var graph = new MJ.Graph({tree: bst});
     graph.display();
-
-    paper = graph.paper;
 }
 
 /**
