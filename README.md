@@ -1,7 +1,12 @@
 # BinaryTrees
 - 一些二叉树相关的操作(Some operations for binary tree)
 
-## BinaryTreePrinter
+## BinaryTreeGraph（JS版本）
+- 用于展示二叉树的图形化小工具（Graph for displaying a binary tree）
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190407183600905-716058085.png)
+
+## BinaryTreePrinter（Java版本）
 ### 简介（Intro）
 - 树状打印一棵二叉树（Print a binary tree like a real tree）
 - 比如输入一棵二叉搜索树（For exampe, if you input a binary search tree）: 

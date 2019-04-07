@@ -1,0 +1,45 @@
+body,
+p,
+h3{
+    padding: 0;
+    margin: 0;
+}
+
+#paper {
+    border: 2px solid #000;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+}
+
+#controls {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+#controls textarea {
+    resize: none;
+    width: 330px;
+    height: 100px;
+    border: 1px dashed #000;
+    margin-bottom: 10px;
+}
+
+#controls input[type="text"] {
+    width: 135px;
+}
+
+#controls input[type="button"] {
+    border: none;
+    background-color: orange;
+    color: white;
+    font-size: 14px;
+    line-height: 26px;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    outline: none;
+}
