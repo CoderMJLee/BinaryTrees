@@ -29,13 +29,13 @@ public class LevelOrderPrinter extends Printer {
 	private static final int MIN_SPACE = 1;
 	private Node root;
 	private int minX;
-	private int maxLength;
+	private int maxWidth;
 
 	public LevelOrderPrinter(BinaryTreeInfo tree) {
 		super(tree);
 
 		root = new Node(tree.root(), tree);
-		maxLength = root.length;
+		maxWidth = root.width;
 	}
 
 	@Override
@@ -46,10 +46,11 @@ public class LevelOrderPrinter extends Printer {
 		cleanNodes(nodes);
 		compressNodes(nodes);
 		addLineNodes(nodes);
+		
+		int rowCount = nodes.size();
 
 		// 构建字符串
 		StringBuilder string = new StringBuilder();
-		int rowCount = nodes.size();
 		for (int i = 0; i < rowCount; i++) {
 			if (i != 0) {
 				string.append("\n");
@@ -76,7 +77,7 @@ public class LevelOrderPrinter extends Printer {
 		Node node = null;
 		if (btNode != null) {
 			node = new Node(btNode, tree);
-			maxLength = Math.max(maxLength, node.length);
+			maxWidth = Math.max(maxWidth, node.width);
 			nodes.add(node);
 		} else {
 			nodes.add(null);
@@ -140,10 +141,10 @@ public class LevelOrderPrinter extends Printer {
 		int lastRowNodeCount = nodes.get(rowCount - 1).size();
 
 		// 每个节点之间的间距
-		int nodeSpace = maxLength + 2;
+		int nodeSpace = maxWidth + 2;
 
 		// 最后一行的长度
-		int lastRowLength = lastRowNodeCount * maxLength 
+		int lastRowLength = lastRowNodeCount * maxWidth 
 				+ nodeSpace * (lastRowNodeCount - 1);
 
 		// 空集合
@@ -155,7 +156,7 @@ public class LevelOrderPrinter extends Printer {
 			int rowNodeCount = rowNodes.size();
 			// 节点左右两边的间距
 			int allSpace = lastRowLength - (rowNodeCount - 1) * nodeSpace;
-			int cornerSpace = allSpace / rowNodeCount - maxLength;
+			int cornerSpace = allSpace / rowNodeCount - maxWidth;
 			cornerSpace >>= 1;
 
 			int rowLength = 0;
@@ -168,11 +169,11 @@ public class LevelOrderPrinter extends Printer {
 				Node node = rowNodes.get(j);
 				if (node != null) {
 					// 居中（由于奇偶数的问题，可能有1个符号的误差）
-					int deltaX = (maxLength - node.length) >> 1;
+					int deltaX = (maxWidth - node.width) >> 1;
 					node.x = rowLength + deltaX;
 					node.y = i;
 				}
-				rowLength += maxLength;
+				rowLength += maxWidth;
 				rowLength += cornerSpace;
 			}
 			// 删除所有的null
@@ -327,15 +328,15 @@ public class LevelOrderPrinter extends Printer {
 		 */
 		int x;
 		int y;
-		int height;
+		int treeHeight;
 		String string;
-		int length;
+		int width;
 
 		private void init(String string) {
 			string = (string == null) ? "null" : string;
 			string = string.isEmpty() ? " " : string;
 
-			length = string.length();
+			width = string.length();
 			this.string = string;
 		}
 
@@ -356,7 +357,7 @@ public class LevelOrderPrinter extends Printer {
 		 */
 		private int topLineX() {
 			// 宽度的一半
-			int delta = length;
+			int delta = width;
 			if (delta % 2 == 0) {
 				delta--;
 			}
@@ -436,26 +437,28 @@ public class LevelOrderPrinter extends Printer {
 			int newRightX = rightX() + delta;
 			right.translateX(newRightX - right.x);
 
-			int newLeftX = x - delta - left.length;
+			int newLeftX = x - delta - left.width;
 			left.translateX(newLeftX - left.x);
 		}
 
-		private int height(Node node) {
+		private int treeHeight(Node node) {
 			if (node == null) return 0;
-			if (node.height != 0) return node.height;
-			node.height = 1 + Math.max(height(node.left), height(node.right));
-			return node.height;
+			if (node.treeHeight != 0) return node.treeHeight;
+			node.treeHeight = 1 + Math.max(
+					treeHeight(node.left), treeHeight(node.right));
+			return node.treeHeight;
 		}
 
 		/**
 		 * 和右节点之间的最小层级距离
 		 */
 		private int minLevelSpaceToRight(Node right) {
-			int thisHeight = height(this);
-			int rightHeight = height(right);
+			int thisHeight = treeHeight(this);
+			int rightHeight = treeHeight(right);
 			int minSpace = Integer.MAX_VALUE;
 			for (int i = 0; i < thisHeight && i < rightHeight; i++) {
-				int space = right.levelInfo(i).leftX - this.levelInfo(i).rightX;
+				int space = right.levelInfo(i).leftX 
+						- this.levelInfo(i).rightX;
 				minSpace = Math.min(minSpace, space);
 			}
 			return minSpace;
@@ -464,7 +467,7 @@ public class LevelOrderPrinter extends Printer {
 		private LevelInfo levelInfo(int level) {
 			if (level < 0) return null;
 			int levelY = y + level;
-			if (level >= height(this)) return null;
+			if (level >= treeHeight(this)) return null;
 
 			List<Node> list = new ArrayList<>();
 			Queue<Node> queue = new LinkedList<>();
@@ -494,7 +497,7 @@ public class LevelOrderPrinter extends Printer {
 		 * 尾字符的下一个位置
 		 */
 		public int rightX() {
-			return x + length;
+			return x + width;
 		}
 
 		public void translateX(int deltaX) {

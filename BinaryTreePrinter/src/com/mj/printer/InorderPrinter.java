@@ -40,7 +40,10 @@ public class InorderPrinter extends Printer {
 
 	@Override
 	public String printString() {
-		return printString(tree.root(), "", "", "");
+		StringBuilder string = new StringBuilder(
+				printString(tree.root(), "", "", ""));
+		string.deleteCharAt(string.length() - 1);
+		return string.toString();
 	}
 	
 	/**
