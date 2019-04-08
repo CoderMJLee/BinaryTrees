@@ -19,6 +19,8 @@ Ext.define('MJ.BinaryTree', {
         this.initConfig(cfg);
     },
     add: function (element, leftElement, rightElement) {
+        if (!element) return;
+
         var node = null;
         if (!this.root) {
             node = this.root = new MJ.BinaryTree.Node({

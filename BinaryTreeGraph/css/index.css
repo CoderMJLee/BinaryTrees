@@ -85,3 +85,10 @@ hr {
 #controls input[type="button"]:active {
     background-color: red;
 }
+
+#ad {
+    font-size: 28px;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}

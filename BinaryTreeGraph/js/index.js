@@ -116,9 +116,9 @@ function initBt() {
     var $bt = $('#bt');
     $bt.find('.add').click(function () {
         MJ.Demo.btTree.add(
-            $bt.find('.node').val(),
-            $bt.find('.left').val(),
-            $bt.find('.right').val()
+            $bt.find('.node').val().trim(),
+            $bt.find('.left').val().trim(),
+            $bt.find('.right').val().trim()
         );
         display();
     });
