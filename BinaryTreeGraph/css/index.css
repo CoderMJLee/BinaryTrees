@@ -57,3 +57,7 @@ textarea {
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
+#controls input[type="button"]:active {
+    background-color: red;
+}
