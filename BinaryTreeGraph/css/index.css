@@ -11,6 +11,18 @@ textarea {
     outline: none;
 }
 
+h2 {
+    margin: 10px 0;
+    padding: 0;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    margin: 15px -10px;
+    background-color: #000;
+}
+
 #paper {
     border: 2px solid #000;
     position: absolute;
@@ -19,9 +31,16 @@ textarea {
     display: none;
 }
 
+#common .type {
+    margin-bottom: 10px;
+}
+
 #controls {
     margin-left: 10px;
     margin-top: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    display: inline-block;
 }
 
 #controls textarea {
@@ -31,8 +50,13 @@ textarea {
     margin-bottom: 10px;
 }
 
-#controls input[type="text"] {
+#bst input[type="text"] {
     width: 135px;
+}
+
+#bt input[type="text"] {
+    width: 200px;
+    margin-bottom: 10px;
 }
 
 #controls input[type="text"],

@@ -4,9 +4,11 @@
 ## BinaryTreeGraph（JS版本）
 - 用于展示二叉树的图形化小工具（Graph for displaying a binary tree）
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190407195900332-1594984894.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190408183858073-900397774.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190407195905516-147813996.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190408183903970-40813653.png)
+
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190408184108025-406511484.png)
 
 ## BinaryTreePrinter（Java版本）
 ### 简介（Intro）

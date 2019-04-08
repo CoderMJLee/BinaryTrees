@@ -1,54 +1,83 @@
 /**
  * Created by MJ Lee on 2019/4/6.
  */
-$(function () {
-    initHtml();
-});
 
 Ext.define('MJ.Demo', {
     statics: {
         randomMaxCount: 20,
         randomMaxValue: 100,
-        tree: new MJ.BinarySearchTree()
+        bstTree: new MJ.BinarySearchTree(),
+        btTree: new MJ.BinaryTree(),
+        SHOW_BST: '1',
+        SHOW_BT: '0'
     }
 });
 
+$(function () {
+    $('#paper')
+        .css('left', '390px')
+        .css('top', '10px');
+
+    $('#elbow').click(display);
+    
+    $('#line').click(display);
+
+    $('#common .type select').change(function () {
+        if ($(this).val() === MJ.Demo.SHOW_BT) {
+            $('#bt').show();
+            $('#bst').hide();
+        } else {
+            $('#bst').show();
+            $('#bt').hide();
+        }
+
+        display();
+    });
+
+    initBst();
+    initBt();
+});
+
 function display() {
+    var showBst = $('#common .type select').val() === MJ.Demo.SHOW_BST;
+
     var linkType = MJ.Graph.LINK_TYPE_ELBOW;
     if ($('#line').is(':checked')) {
         linkType = MJ.Graph.LINK_TYPE_LINE;
     }
     new MJ.Graph({
-        tree: MJ.Demo.tree,
+        tree: showBst ? MJ.Demo.bstTree : MJ.Demo.btTree,
         linkType: linkType
     }).display();
+
+    if (showBst) {
+        $('#bst h2').text('二叉搜索树（节点数：' + MJ.Demo.bstTree.size + '）');
+    } else {
+        $('#bt h2').text('二叉树（节点数：' + MJ.Demo.btTree.size + '）');
+    }
 }
 
-function initHtml() {
-    var $textarea = $('#controls textarea');
-    var left = $textarea.offset().left + $textarea.width() + 20;
+function initBst() {
+    var $bst = $('#bst');
+    var $textarea = $bst.find('.data');
 
-    $('#paper')
-        .css('left', left + 'px')
-        .css('top', '10px');
-
-    $('#show').click(function () {
-        var eles = $('#data').val().split(/\D+/i);
-        MJ.Demo.tree.clear();
+    $bst.find('.show').click(function () {
+        var eles = $textarea.val().split(/\D+/i);
+        MJ.Demo.bstTree.clear();
         for (var i in eles) {
-            MJ.Demo.tree.add(parseInt(eles[i].trim()));
+            MJ.Demo.bstTree.add(parseInt(eles[i].trim()));
         }
         display();
     });
 
-    $('#random').click(function () {
-        var count = $('#max-count').val();
+    $bst.find('.random').click(function () {
+        var count = $bst.find('.max-count').val();
         if (Ext.isNumeric(count)) {
             count = parseInt(count);
         } else {
             count = MJ.Demo.randomMaxCount;
         }
-        var value = $('#max-value').val();
+        var value = $bst.find('.max-value').val();
         if (Ext.isNumeric(value)) {
             value = parseInt(value);
         } else {
@@ -66,24 +95,37 @@ function initHtml() {
         $textarea.val(text);
     });
 
-    $('#add').click(function () {
-        var eles = $('#data').val().split(/\D+/i);
+    $bst.find('.add').click(function () {
+        var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
-            MJ.Demo.tree.add(parseInt(eles[i].trim()));
+            MJ.Demo.bstTree.add(parseInt(eles[i].trim()));
         }
         display();
     });
 
-    $('#remove').click(function () {
-        var eles = $('#data').val().split(/\D+/i);
+    $bst.find('.remove').click(function () {
+        var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
-            MJ.Demo.tree.remove(parseInt(eles[i].trim()));
+            MJ.Demo.bstTree.remove(parseInt(eles[i].trim()));
         }
         display();
     });
+}
 
-    $('#elbow').click(display);
-    $('#line').click(display);
+function initBt() {
+    var $bt = $('#bt');
+    $bt.find('.add').click(function () {
+        MJ.Demo.btTree.add(
+            $bt.find('.node').val(),
+            $bt.find('.left').val(),
+            $bt.find('.right').val()
+        );
+        display();
+    });
+    $bt.find('.remove').click(function () {
+        MJ.Demo.btTree.remove($bt.find('.node').val());
+        display();
+    });
 }
 
 /**

@@ -9,28 +9,57 @@
 <body>
 
 <div id="controls">
-    <div>
-        <input type="text" id="max-count" placeholder="最大节点数量(默认20)">
-        <input type="text" id="max-value" placeholder="最大数值(默认100)">
-        <input id="random" type="button" value="随机">
-    </div>
-    <textarea name="" id="data" placeholder="请输入一棵二叉搜索树（仅限于整数），数据之间用逗号隔开"></textarea>
-    <div>
-        <input id="show" type="button" value="显示">
-        <input id="add" type="button" value="添加">
-        <input id="remove" type="button" value="删除">
-    </div>
-    <div>
-        箭头样式：
-        <label for="elbow">
-            肘形
-            <input id="elbow" type="radio" name="link-type" checked>
-        </label>
-        <label for="line">
-            直线
-            <input id="line" type="radio" name="link-type">
-        </label>
 
+    <div id="common">
+        <div class="type">
+            类型：
+            <select name="type">
+                <option value="0">二叉树</option>
+                <option value="1">二叉搜索树</option>
+            </select>
+        </div>
+        <div class="arrow">
+            箭头样式：
+            <label for="elbow">
+                肘形
+                <input id="elbow" type="radio" name="link-type" checked>
+            </label>
+            <label for="line">
+                直线
+                <input id="line" type="radio" name="link-type">
+            </label>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="bt">
+        <h2>二叉树（节点数：0）</h2>
+        <div>
+            <input type="text" class="node" placeholder="节点">
+            <br>
+            <input type="text" class="left" placeholder="左子节点">
+            <br>
+            <input type="text" class="right" placeholder="右子节点">
+            <br>
+            <input class="add" type="button" value="添加">
+            <input class="remove" type="button" value="删除">
+        </div>
+    </div>
+
+    <div id="bst" style="display: none">
+        <h2>二叉搜索树（节点数：0）</h2>
+        <div>
+            <input type="text" class="max-count" placeholder="最大节点数量(默认20)">
+            <input type="text" class="max-value" placeholder="最大数值(默认100)">
+            <input class="random" type="button" value="随机">
+        </div>
+        <textarea name="" class="data" placeholder="请输入一棵二叉搜索树（仅限于整数），数据之间用逗号隔开"></textarea>
+        <div>
+            <input class="show" type="button" value="显示">
+            <input class="add" type="button" value="添加">
+            <input class="remove" type="button" value="删除">
+        </div>
     </div>
 </div>
 

@@ -46,6 +46,7 @@ Ext.define('MJ.Graph', {
             string: this.tree.getString(btRoot),
             btNode: btRoot
         });
+
         this.nodes = [];
         this._fillNodes();
         this._placeNodes();

@@ -18,6 +18,104 @@ Ext.define('MJ.BinaryTree', {
     constructor: function (cfg) {
         this.initConfig(cfg);
     },
+    add: function (element, leftElement, rightElement) {
+        var node = null;
+        if (!this.root) {
+            node = this.root = new MJ.BinaryTree.Node({
+                element: element
+            });
+            this.size = 1;
+        } else {
+            node = this._node(element);
+        }
+        if (!node) return;
+
+        if (leftElement) {
+            var left = node.left;
+            node.left = new MJ.BinaryTree.Node({
+                element: leftElement,
+                parent: node
+            });
+            if (!left) {
+                this.size++;
+            } else {
+                node.left.left = left.left;
+                node.left.right = left.right;
+            }
+        }
+
+        if (rightElement) {
+            var right = node.right;
+            node.right = new MJ.BinaryTree.Node({
+                element: rightElement,
+                parent: node
+            });
+            if (!right) {
+                this.size++;
+            } else {
+                node.right.left = right.left;
+                node.right.right = right.right;
+            }
+        }
+    },
+    _node: function (element) {
+        if (!element || !this.root) return null;
+
+        var queue = [];
+        queue.push(this.root);
+
+        while (queue.length > 0) {
+            var node = queue.shift();
+            if (MJ.Comparator.compare(node.element, element) === 0) return node;
+
+            if (node.left) {
+                queue.push(node.left);
+            }
+
+            if (node.right) {
+                queue.push(node.right);
+            }
+        }
+    },
+    remove: function(element) {
+        var node = this._node(element);
+        if (!node) return;
+
+        // 数量减1
+        this.size--;
+
+        // 如果度为2
+        if (node.left && node.right) {
+            // 用后继节点的内容覆盖当前节点
+            var s = this.successor(node);
+            node.element = s.element;
+            // 将后继节点删掉（这里的后继节点的度要么是1，要么是0）
+            node = s;
+        }
+
+        // 用来替代的元素
+        var replacement = node.left ? node.left : node.right;
+        if (replacement) { // node是度为1的节点
+            replacement.parent = node.parent;
+            if (!node.parent) {
+                this.root = replacement;
+            } else if (node.parent.left === node) { // node是父节点的左子树
+                node.parent.left = replacement;
+            } else { // node是父节点的右子树
+                node.parent.right = replacement;
+            }
+            node.left = node.right = node.parent = null;
+        } else if (!node.parent) { // node是根节点
+            this.root = null;
+        } else { // node是叶子节点
+            if (node === node.parent.left) {
+                node.parent.left = null;
+            } else {
+                node.parent.right = null;
+            }
+            node.parent = null;
+        }
+    },
     inorderTraversal: function () {
         var eles = [];
         this._inorderTraversal(this.root, eles);
@@ -176,7 +274,7 @@ Ext.define('MJ.BinarySearchTree', {
         }
         this.size++;
     },
-    node: function(element) {
+    _node: function(element) {
         if(!element) return null;
         var node = this.root;
         while (node) {
@@ -189,44 +287,5 @@ Ext.define('MJ.BinarySearchTree', {
             }
         }
         return node;
-    },
-    remove: function(element) {
-        var node = this.node(element);
-        if (!node) return;
-
-        // 数量减1
-        this.size--;
-
-        // 如果度为2
-        if (node.left && node.right) {
-            // 用后继节点的内容覆盖当前节点
-            var s = this.successor(node);
-            node.element = s.element;
-            // 将后继节点删掉（这里的后继节点的度要么是1，要么是0）
-            node = s;
-        }
-
-        // 用来替代的元素
-        var replacement = node.left ? node.left : node.right;
-        if (replacement) { // node是度为1的节点
-            replacement.parent = node.parent;
-            if (!node.parent) {
-                this.root = replacement;
-            } else if (node.parent.left === node) { // node是父节点的左子树
-                node.parent.left = replacement;
-            } else { // node是父节点的右子树
-                node.parent.right = replacement;
-            }
-            node.left = node.right = node.parent = null;
-        } else if (!node.parent) { // node是根节点
-            this.root = null;
-        } else { // node是叶子节点
-            if (node === node.parent.left) {
-                node.parent.left = null;
-            } else {
-                node.parent.right = null;
-            }
-            node.parent = null;
-        }
     }
 });
