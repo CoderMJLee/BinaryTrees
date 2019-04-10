@@ -38,8 +38,8 @@ Ext.define('MJ.Graph', {
     display: function () {
         var btRoot = this.tree ? this.tree.getRoot() : null;
         if (!btRoot) {
-            $('#paper svg').empty();
-            return;
+            $('#paper').find('svg').empty();
+            return this;
         }
 
         this.root = new MJ.Graph.Node({
@@ -53,6 +53,7 @@ Ext.define('MJ.Graph', {
         this._compressNodes();
         this._measureNodes();
         this._displayNodes();
+        return this;
     },
     _addNode: function (nodes, btNode) {
         var node = null;

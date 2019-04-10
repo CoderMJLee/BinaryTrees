@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>BinaryTreeGraph</title>
     <link rel="stylesheet" type="text/css" href="css/joint.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.min.css" />
 </head>
 <body>
 
@@ -16,6 +16,7 @@
             <select name="type">
                 <option value="0">二叉树</option>
                 <option value="1">二叉搜索树</option>
+                <option value="2">AVL树</option>
             </select>
         </div>
         <div class="arrow">
@@ -34,7 +35,7 @@
     <hr>
 
     <div id="bt">
-        <h2>二叉树（节点数：0）</h2>
+        <h2>二叉树（节点数：<span class="node-count">0</span>）</h2>
         <div>
             <input type="text" class="node" placeholder="节点">
             <br>
@@ -48,7 +49,22 @@
     </div>
 
     <div id="bst" style="display: none">
-        <h2>二叉搜索树（节点数：0）</h2>
+        <h2>二叉搜索树（节点数：<span class="node-count">0</span>）</h2>
+        <div>
+            <input type="text" class="max-count" placeholder="最大节点数量(默认20)">
+            <input type="text" class="max-value" placeholder="最大数值(默认100)">
+            <input class="random" type="button" value="随机">
+        </div>
+        <textarea name="" class="data" placeholder="请输入一棵二叉搜索树（仅限于整数），数据之间用逗号隔开"></textarea>
+        <div>
+            <input class="show" type="button" value="显示">
+            <input class="add" type="button" value="添加">
+            <input class="remove" type="button" value="删除">
+        </div>
+    </div>
+
+    <div id="avl" style="display: none">
+        <h2>AVL树（节点数：<span class="node-count">0</span>）</h2>
         <div>
             <input type="text" class="max-count" placeholder="最大节点数量(默认20)">
             <input type="text" class="max-value" placeholder="最大数值(默认100)">
@@ -72,9 +88,9 @@
 <script src="js/lib/backbone.min.js"></script>
 <script src="js/lib/joint.min.js"></script>
 <script src="js/lib/ext.min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/tree.js"></script>
-<script src="js/graph.js"></script>
-<script src="js/index.js"></script>
+<script src="js/common.min.js"></script>
+<script src="js/tree.min.js"></script>
+<script src="js/graph.min.js"></script>
+<script src="js/index.min.js"></script>
 </body>
 </html>

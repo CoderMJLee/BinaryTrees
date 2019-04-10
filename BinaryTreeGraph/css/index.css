@@ -1,4 +1,8 @@
-body,
+body {
+    padding: 15px;
+    margin: 0;
+}
+
 p,
 h3{
     padding: 0;
@@ -36,8 +40,6 @@ hr {
 }
 
 #controls {
-    margin-left: 10px;
-    margin-top: 10px;
     border: 1px solid black;
     padding: 10px;
     display: inline-block;
@@ -50,6 +52,7 @@ hr {
     margin-bottom: 10px;
 }
 
+#avl input[type="text"],
 #bst input[type="text"] {
     width: 135px;
 }

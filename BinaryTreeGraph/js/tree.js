@@ -106,17 +106,29 @@ Ext.define('MJ.BinaryTree', {
             } else { // node是父节点的右子树
                 node.parent.right = replacement;
             }
+            this.afterRemove(node, replacement);
             node.left = node.right = node.parent = null;
         } else if (!node.parent) { // node是根节点
             this.root = null;
+            this.afterRemove(node);
         } else { // node是叶子节点
             if (node === node.parent.left) {
                 node.parent.left = null;
             } else {
                 node.parent.right = null;
             }
+            this.afterRemove(node);
             node.parent = null;
         }
+    },
+    afterRemove: function (node, replacement) {
+
+    },
+    createNode: function (element, parent) {
+        return new MJ.BinaryTree.Node({
+            element: element,
+            parent: parent
+        });
     },
     inorderTraversal: function () {
         var eles = [];
@@ -188,26 +200,32 @@ Ext.define('MJ.BinaryTree.Node', {
         right: null,
         parent: null,
         element: null,
-        height: 0,
-        depth: 0
-    },
-    getHeight: function () {
-        if (this.height > 0) return this.height;
-        this.height = this._getHeight(this);
-        return this.height;
-    },
-    _getHeight: function (node) {
-        if (!node) return 0;
-        var leftHeight = this._getHeight(node.left);
-        var rightHeight = this._getHeight(node.right);
-        var height = 1 + Math.max(leftHeight, rightHeight);
-        return node.height = height;
+        height: 1
     },
     constructor: function (cfg) {
         this.initConfig(cfg);
     },
     toString: function () {
         return this.element.toString();
+    },
+    isLeaf: function () {
+        return !this.left && !this.right;
+    },
+    hasTwoChildren: function () {
+        return this.left && this.right;
+    },
+    isLeftChild: function () {
+        return this.parent && this === this.parent.left;
+    },
+    isRightChild: function () {
+        return this.parent && this === this.parent.right;
+    },
+    tallerChild: function () {
+        var leftHeight = this.left ? this.left.height : 0;
+        var rightHeight = this.right ? this.right.height : 0;
+        if (leftHeight > rightHeight) return this.left;
+        if (rightHeight > leftHeight) return this.right;
+        return this.isLeftChild() ? this.left : this.right;
     }
 });
 
@@ -241,9 +259,7 @@ Ext.define('MJ.BinarySearchTree', {
         if (!element) return;
 
         if (!this.root) {
-            this.root = new MJ.BinaryTree.Node({
-                element: element
-            });
+            this.root = this.createNode(element);
             this.size++;
             return;
         }
@@ -265,16 +281,19 @@ Ext.define('MJ.BinarySearchTree', {
             }
         }
 
-        var newNode = new MJ.BinaryTree.Node({
-            element: element,
-            parent: parent
-        });
+        var newNode = this.createNode(element, parent);
         if (cmp > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
         this.size++;
+
+        // 添加之后
+        this.afterAdd(newNode);
+    },
+    afterAdd: function (node) {
+
     },
     _node: function(element) {
         if(!element) return null;
@@ -289,5 +308,129 @@ Ext.define('MJ.BinarySearchTree', {
             }
         }
         return node;
+    }
+});
+
+Ext.define('MJ.AVLTree', {
+    extend: 'MJ.BinarySearchTree',
+    constructor: function (cfg) {
+        this.initConfig(cfg);
+        this.callParent(arguments);
+
+    },
+    createNode: function (element, parent) {
+        return new MJ.AVLTree.Node({
+            element: element,
+            parent: parent
+        });
+    },
+    afterAdd: function (node) {
+        this.callParent(arguments);
+
+        node = node.parent;
+        while (node) {
+            if (node.isBalanced()) {
+                // 更新高度
+                node.updateHeight();
+            } else {
+                // 恢复平衡
+                this.rebalance(node);
+                break;
+            }
+            node = node.parent;
+        }
+    },
+    afterRemove: function (node, replacement) {
+        this.callParent(arguments);
+
+        node = node.parent;
+        while (node) {
+            if (node.isBalanced()) {
+                node.updateHeight();
+            } else {
+                this.rebalance(node);
+            }
+            node = node.parent;
+        }
+    },
+    afterRotate: function (g, p, c) {
+        // 子树的根节点嫁接到原树中
+        if (g.isLeftChild()) {
+            g.parent.left = p;
+        } else if (g.isRightChild()) {
+            g.parent.right = p;
+        } else {
+            this.root = p;
+        }
+
+        // parent维护
+        if (c) {
+            c.parent = g;
+        }
+        p.parent = g.parent;
+        g.parent = p;
+
+        // 更新高度（先更新比较矮的g，再更新比较高的p）
+        g.updateHeight();
+        p.updateHeight();
+    },
+    leftRotate: function (g) {
+        // 交换子树
+        var p = g.right;
+        var c = p.left;
+        g.right = c;
+        p.left = g;
+        // 维护parent和height
+        this.afterRotate(g, p, c);
+    },
+    rightRotate: function (g) {
+        // 交换子树
+        var p = g.left;
+        var c = p.right;
+        g.left = c;
+        p.right = g;
+        // 维护parent和height
+        this.afterRotate(g, p, c);
+    },
+    rebalance: function (g) {
+        p = g.tallerChild();
+        n = p.tallerChild();
+        if (p.isLeftChild()) { // L
+            if (n.isLeftChild()) { // LL
+                this.rightRotate(g);
+            } else { // LR
+                this.leftRotate(p);
+                this.rightRotate(g);
+            }
+        } else { // R
+            if (n.isLeftChild()) { // RL
+                this.rightRotate(p);
+                this.leftRotate(g);
+            } else { // RR
+                this.leftRotate(g);
+            }
+        }
+    }
+});
+
+Ext.define('MJ.AVLTree.Node', {
+    extend: 'MJ.BinaryTree.Node',
+    constructor: function (cfg) {
+        this.initConfig(cfg);
+        this.callParent(arguments);
+
+    },
+    isBalanced: function () {
+        return Math.abs(this.balanceFactor()) <= 1;
+    },
+    balanceFactor: function () {
+        var leftHeight = this.left ? this.left.height : 0;
+        var rightHeight = this.right ? this.right.height : 0;
+        return leftHeight - rightHeight;
+    },
+    updateHeight: function () {
+        var leftHeight = this.left ? this.left.height : 0;
+        var rightHeight = this.right ? this.right.height : 0;
+        this.height = 1 + Math.max(leftHeight, rightHeight);
     }
 });

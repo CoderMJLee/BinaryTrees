@@ -6,10 +6,15 @@ Ext.define('MJ.Demo', {
     statics: {
         randomMaxCount: 20,
         randomMaxValue: 100,
+        avlTree: new MJ.AVLTree(),
         bstTree: new MJ.BinarySearchTree(),
         btTree: new MJ.BinaryTree(),
+        SHOW_AVL: '2',
         SHOW_BST: '1',
-        SHOW_BT: '0'
+        SHOW_BT: '0',
+        $avlCtl: $('#avl'),
+        $bstCtl: $('#bst'),
+        $btCtl: $('#bt')
     }
 });
 
@@ -22,62 +27,82 @@ $(function () {
     
     $('#line').click(display);
 
-    $('#common .type select').change(function () {
-        if ($(this).val() === MJ.Demo.SHOW_BT) {
-            $('#bt').show();
-            $('#bst').hide();
-        } else {
-            $('#bst').show();
-            $('#bt').hide();
-        }
+    $('#common').find('.type select').change(function () {
+        MJ.Demo.$avlCtl.hide();
+        MJ.Demo.$bstCtl.hide();
+        MJ.Demo.$btCtl.hide();
+        showingTreeCtl().show();
 
         display();
     });
 
-    initBst();
     initBt();
+    initBst(MJ.Demo.$bstCtl, MJ.Demo.bstTree);
+    initBst(MJ.Demo.$avlCtl, MJ.Demo.avlTree);
+
+    // 初始化
+    MJ.Demo.btTree.add("Life", "Animal", "Person");
+    MJ.Demo.btTree.add("Person", "Man", "Woman");
+    MJ.Demo.btTree.add("Animal", "Cat", "Dog");
+    MJ.Demo.btTree.add("Dog", "Teddy", "SingleDog");
+    display();
 });
 
-function display() {
-    var showBst = $('#common .type select').val() === MJ.Demo.SHOW_BST;
+function showingTreeCtl() {
+    var val = $('#common').find('.type select').val();
+    if (val === MJ.Demo.SHOW_BT) {
+        return MJ.Demo.$btCtl;
+    } else if (val === MJ.Demo.SHOW_BST) {
+        return MJ.Demo.$bstCtl;
+    } else if (val === MJ.Demo.SHOW_AVL) {
+        return MJ.Demo.$avlCtl;
+    }
+}
 
+function showingTree() {
+    var val = $('#common').find('.type select').val();
+    if (val === MJ.Demo.SHOW_BT) {
+        return MJ.Demo.btTree;
+    } else if (val === MJ.Demo.SHOW_BST) {
+        return MJ.Demo.bstTree;
+    } else if (val === MJ.Demo.SHOW_AVL) {
+        return MJ.Demo.avlTree;
+    }
+}
+
+function display() {
     var linkType = MJ.Graph.LINK_TYPE_ELBOW;
     if ($('#line').is(':checked')) {
         linkType = MJ.Graph.LINK_TYPE_LINE;
     }
-    new MJ.Graph({
-        tree: showBst ? MJ.Demo.bstTree : MJ.Demo.btTree,
+
+    var graph = new MJ.Graph({
+        tree: showingTree(),
         linkType: linkType
     }).display();
 
-    if (showBst) {
-        $('#bst h2').text('二叉搜索树（节点数：' + MJ.Demo.bstTree.size + '）');
-    } else {
-        $('#bt h2').text('二叉树（节点数：' + MJ.Demo.btTree.size + '）');
-    }
+    showingTreeCtl().find('h2 .node-count').text(graph.tree.size);
 }
 
-function initBst() {
-    var $bst = $('#bst');
-    var $textarea = $bst.find('.data');
-
-    $bst.find('.show').click(function () {
+function initBst($bstCtl, bstTree) {
+    var $textarea = $bstCtl.find('.data');
+    $bstCtl.find('.show').click(function () {
         var eles = $textarea.val().split(/\D+/i);
-        MJ.Demo.bstTree.clear();
+        bstTree.clear();
         for (var i in eles) {
-            MJ.Demo.bstTree.add(parseInt(eles[i].trim()));
+            bstTree.add(parseInt(eles[i].trim()));
         }
         display();
     });
 
-    $bst.find('.random').click(function () {
-        var count = $bst.find('.max-count').val();
+    $bstCtl.find('.random').click(function () {
+        var count = $bstCtl.find('.max-count').val();
         if (Ext.isNumeric(count)) {
             count = parseInt(count);
         } else {
             count = MJ.Demo.randomMaxCount;
         }
-        var value = $bst.find('.max-value').val();
+        var value = $bstCtl.find('.max-value').val();
         if (Ext.isNumeric(value)) {
             value = parseInt(value);
         } else {
@@ -95,25 +120,25 @@ function initBst() {
         $textarea.val(text);
     });
 
-    $bst.find('.add').click(function () {
+    $bstCtl.find('.add').click(function () {
         var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
-            MJ.Demo.bstTree.add(parseInt(eles[i].trim()));
+            bstTree.add(parseInt(eles[i].trim()));
         }
         display();
     });
 
-    $bst.find('.remove').click(function () {
+    $bstCtl.find('.remove').click(function () {
         var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
-            MJ.Demo.bstTree.remove(parseInt(eles[i].trim()));
+            bstTree.remove(parseInt(eles[i].trim()));
         }
         display();
     });
 }
 
 function initBt() {
-    var $bt = $('#bt');
+    var $bt = MJ.Demo.$btCtl;
     $bt.find('.add').click(function () {
         MJ.Demo.btTree.add(
             $bt.find('.node').val().trim(),
