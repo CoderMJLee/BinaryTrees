@@ -1,7 +1,7 @@
 /**
  * Created by MJ Lee on 2019/4/6.
  */
-Ext.define('MJ.Graph', {
+Ext.define('MJ.Graph.Layout', {
     statics: {
         BG_FILL: 'white',
         NODE_FILL: '#f92672',
@@ -10,40 +10,169 @@ Ext.define('MJ.Graph', {
         LINK_STROKE: '#424242',
         ARROW_FILL: 'yellow',
         FONT_SIZE: 20,
-        FONT_FAMILY: 'Consolas',
+        FONT_FAMILY: 'Consolas, Menlo, Monaco, monospace, serif'
+    },
+    config: {
+        width: 0,
+        height: 0,
+        // jQuery对象
+        $paper: null
+    },
+    constructor: function (cfg) {
+        this.initConfig(cfg);
+    },
+    display: function () {
+        this.$paper.find('svg').empty();
+        var cells = this.buildCells_();
+        if (!cells) return this;
+
+        var paperPadding = 40;
+        var pWidth = Math.max(500, this.width) + paperPadding;
+        var pHeight = Math.max(400, this.height) + paperPadding;
+
+        var graph = new joint.dia.Graph;
+        var paper = new joint.dia.Paper({
+            el: this.$paper,
+            width: pWidth,
+            height: pHeight,
+            model: graph,
+            drawGrid: true,
+            gridSize: 10,
+            background: {
+                color: MJ.Graph.Layout.BG_FILL
+            }
+        });
+
+        var tx = (pWidth - this.width) >> 1;
+        var ty = (pHeight - this.height) >> 1;
+        paper.translate(tx, ty);
+        graph.addCells(cells);
+        return this;
+    },
+    buildCells_: function () { },
+    createRect_: function (node, attr) {
+        var rect = new joint.shapes.standard.Rectangle();
+        rect.position(node.x, node.y);
+        rect.resize(node.width, node.height);
+        attr = attr || {
+                body: {
+                    fill: MJ.Graph.Layout.NODE_FILL,
+                    stroke: MJ.Graph.Layout.NODE_STROKE
+                },
+                label: {
+                    text: node.text,
+                    fill: MJ.Graph.Layout.TEXT_FILL,
+                    fontSize: MJ.Graph.Layout.FONT_SIZE,
+                    fontFamily: MJ.Graph.Layout.FONT_FAMILY
+                }
+            };
+        rect.attr(attr);
+        return rect;
+    },
+    createLink_: function (src, srcAnchor,
+                           tar, tarAnchor,
+                           attr) {
+        var link = new joint.shapes.standard.Link();
+
+        attr = attr || {
+                line: {
+                    stroke: MJ.Graph.Layout.LINK_STROKE,
+                    targetMarker: {
+                        fill: MJ.Graph.Layout.ARROW_FILL
+                    }
+                }
+            };
+        link.attr(attr);
+
+        link.source(src, {
+            anchor: { name: srcAnchor }
+        });
+        link.target(tar, {
+            anchor: { name: tarAnchor }
+        });
+        return link;
+    }
+});
+
+/*-----------------------------------------------------------------*/
+
+Ext.define('MJ.Graph.Node', {
+    config: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        text: null,
+        cell: null
+    },
+    constructor: function (cfg) {
+        this.initConfig(cfg);
+    }
+});
+
+/*-----------------------------------------------------------------*/
+
+Ext.define('MJ.BinaryTree.GraphLayout', {
+    extend: 'MJ.Graph.Layout',
+    statics: {
         X_SPACE: 10,
         Y_SPACE: 30,
-        LINE_WIDTH: 30,
         LINK_TYPE_ELBOW: 'elbow',
         LINK_TYPE_LINE: 'line'
     },
     config: {
         // MJ.BinaryTreeInfo
         tree: null,
-        // MJ.Graph.Node
+        // MJ.Graph.Layout.Node
         root: null,
-        // [[MJ.Graph.Node]]
+        // [[MJ.Graph.Layout.Node]]
         nodes: null,
         maxWidth: 0,
         minX: 0,
-        paperWidth: 0,
-        paperHeight: 0,
-        paper: null,
         // elbow\line
         linkType: null
     },
     constructor: function (cfg) {
+        this.callParent(arguments);
         this.initConfig(cfg);
-    },
-    display: function () {
-        var btRoot = this.tree ? this.tree.getRoot() : null;
-        if (!btRoot) {
-            $('#paper').find('svg').empty();
-            return this;
-        }
 
-        this.root = new MJ.Graph.Node({
-            string: this.tree.getString(btRoot),
+        this._buildNodes();
+    },
+    buildCells_: function () {
+        var cells = [];
+        var nodes = this._buildNodes();
+        for (var index in nodes) {
+            this._buildCell(cells, nodes[index]);
+        }
+        return cells;
+    },
+    _buildCell: function (cells, node) {
+        var rect = this.createRect_(node);
+        node.cell = rect;
+        cells.push(rect);
+
+        if (!node.parent) return;
+
+        var srcAnchor = 'left';
+        if (node === node.parent.right) {
+            srcAnchor = 'right';
+        }
+        var link = this.createLink_(node.parent.cell, srcAnchor, rect, 'top');
+        if (!this.linkType ||
+            this.linkType === MJ.BinaryTree.GraphLayout.LINK_TYPE_ELBOW) {
+            link.router('orthogonal', {
+                padding: 3
+            });
+            link.connector('jumpover');
+        }
+        cells.push(link);
+    },
+    _buildNodes: function () {
+        var btRoot = this.tree ? this.tree.getRoot() : null;
+        if (!btRoot) return null;
+
+        this.root = new MJ.BinaryTree.GraphNode({
+            text: this.tree.getString(btRoot),
             btNode: btRoot
         });
 
@@ -52,14 +181,24 @@ Ext.define('MJ.Graph', {
         this._placeNodes();
         this._compressNodes();
         this._measureNodes();
-        this._displayNodes();
-        return this;
+
+        // 层序遍历的结果
+        var nodes = [];
+        for (var row in this.nodes) {
+            var rowNodes = this.nodes[row];
+            for (var index in rowNodes) {
+                var node = rowNodes[index];
+                node.x -= this.minX;
+                nodes.push(node);
+            }
+        }
+        return this.nodes = nodes;
     },
     _addNode: function (nodes, btNode) {
         var node = null;
         if (btNode) {
-            node = new MJ.Graph.Node({
-                string: this.tree.getString(btNode),
+            node = new MJ.BinaryTree.GraphNode({
+                text: this.tree.getString(btNode),
                 btNode: btNode
             });
             nodes.push(node);
@@ -116,8 +255,8 @@ Ext.define('MJ.Graph', {
         var newNodes = [];
 
         // 每个节点的高度
-        var height = MJ.textSize(MJ.Graph.FONT_SIZE + 'px',
-            MJ.Graph.FONT_FAMILY, '6哈j]】').height;
+        var height = MJ.textSize(MJ.Graph.Layout.FONT_SIZE + 'px',
+            MJ.Graph.Layout.FONT_FAMILY, '6哈j]】').height;
 
         // 最后一行的节点数量
         var lastRowNodeCount = this.nodes[rowCount - 1].length;
@@ -149,9 +288,8 @@ Ext.define('MJ.Graph', {
                 var node = rowNodes[j];
                 if (node) {
                     node.x = rowLength;
-                    // node.width = this.maxWidth;
                     node.height = height;
-                    node.y = i * (height + MJ.Graph.Y_SPACE);
+                    node.y = i * (height + MJ.BinaryTree.GraphLayout.Y_SPACE);
                     newRowNodes.push(node);
                 }
                 rowLength += this.maxWidth;
@@ -183,7 +321,7 @@ Ext.define('MJ.Graph', {
                     empty = Math.min(empty, (right.x - left.rightX()) >> 1);
 
                     // left、right的子节点之间可以挪动的最小间距
-                    var space = left.minLevelSpaceToRight(right) - MJ.Graph.X_SPACE;
+                    var space = left.minLevelSpaceToRight(right) - MJ.BinaryTree.GraphLayout.X_SPACE;
                     space = Math.min(space >> 1, empty);
 
                     // left、right往中间挪动
@@ -193,7 +331,7 @@ Ext.define('MJ.Graph', {
                     }
 
                     // 继续挪动
-                    space = left.minLevelSpaceToRight(right) - MJ.Graph.X_SPACE;
+                    space = left.minLevelSpaceToRight(right) - MJ.BinaryTree.GraphLayout.X_SPACE;
                     if (space < 1) continue;
 
                     // 可以继续挪动的间距
@@ -228,129 +366,31 @@ Ext.define('MJ.Graph', {
             }
         }
 
-        this.paperWidth = maxRightX - this.minX;
-        this.paperHeight = maxBottomY;
-    },
-    _displayNode: function (cells, node) {
-        var rect = new joint.shapes.standard.Rectangle();
-        rect.position(node.x - this.minX, node.y);
-
-        rect.resize(node.width, node.height);
-        rect.attr({
-            body: {
-                fill: MJ.Graph.NODE_FILL,
-                stroke: MJ.Graph.NODE_STROKE
-            },
-            label: {
-                text: node.string,
-                fill: MJ.Graph.TEXT_FILL,
-                fontSize: MJ.Graph.FONT_SIZE,
-                fontFamily: MJ.Graph.FONT_FAMILY
-            }
-        });
-        cells.push(rect);
-        node.cell = rect;
-
-
-        if (!node.parent) return;
-
-        var link = new joint.shapes.standard.Link();
-        link.attr({
-            line: {
-                stroke: MJ.Graph.LINK_STROKE,
-                targetMarker: {
-                    fill: MJ.Graph.ARROW_FILL
-                }
-            }
-        });
-        var parentAnchor = 'left';
-        if (node === node.parent.right) {
-            parentAnchor = 'right';
-        }
-        link.source(node.parent.cell, {
-            anchor: { name: parentAnchor }
-        });
-        if (!this.linkType ||
-            this.linkType === MJ.Graph.LINK_TYPE_ELBOW) {
-            link.router('orthogonal', {
-                padding: 10
-            });
-            link.connector('jumpover');
-        }
-        link.target(rect, {
-            anchor: { name: 'top' }
-        });
-        cells.push(link);
-    },
-    _displayNodes: function () {
-        var $paper = $('#paper');
-        $paper.empty();
-        $paper.css('display', 'block');
-
-        var graph = new joint.dia.Graph;
-        var paperPadding = 20;
-
-        var bothPadding = paperPadding << 1;
-        var minWidth = 500;
-        var minHeight = 500;
-        var pWidth = Math.max(minWidth, this.paperWidth) + bothPadding;
-        var pHeight = Math.max(minHeight, this.paperHeight) + bothPadding;
-
-        this.paper = new joint.dia.Paper({
-            el: $paper,
-            width: pWidth,
-            height: pHeight,
-            model: graph,
-            drawGrid: true,
-            gridSize: 10,
-            background: {
-                color: MJ.Graph.BG_FILL
-            }
-        });
-        var tx = paperPadding;
-        var ty = paperPadding;
-        if (minWidth > this.paperWidth) {
-            tx += (minWidth - this.paperWidth) >> 1;
-        }
-        if (minHeight > this.paperHeight) {
-            ty += (minHeight - this.paperHeight) >> 1;
-        }
-        this.paper.translate(tx, ty);
-
-        var cells = [];
-
-        for (var row in this.nodes) {
-            var rowNodes = this.nodes[row];
-            for (var index in rowNodes) {
-                this._displayNode(cells, rowNodes[index]);
-            }
-        }
-
-        graph.addCells(cells);
+        this.width = maxRightX - this.minX;
+        this.height = maxBottomY;
     }
 });
 
-Ext.define('MJ.Graph.Node', {
+/*-----------------------------------------------------------------*/
+
+Ext.define('MJ.BinaryTree.GraphNode', {
+    extend: 'MJ.Graph.Node',
+    statics: {
+        LINE_WIDTH: 30
+    },
     config: {
         left: null,
         right: null,
         parent: null,
-        string: null,
 
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
         level: 0,
 
         btNode: null,
-        cell: null,
         treeHeight: 0
     },
     constructor: function (cfg) {
-        this.initConfig(cfg);
         this.callParent(arguments);
-
+        this.initConfig(cfg);
     },
     getTreeHeight: function () {
         if (this.treeHeight > 0) return this.treeHeight;
@@ -425,18 +465,18 @@ Ext.define('MJ.Graph.Node', {
         return this.rightBound() - this.rightX();
     },
     leftBoundEmptyLength: function () {
-        return this.leftBoundLength() - 1 - MJ.Graph.LINE_WIDTH;
+        return this.leftBoundLength() - 1 - MJ.BinaryTree.GraphNode.LINE_WIDTH;
     },
     rightBoundEmptyLength: function () {
-        return this.rightBoundLength() - 1 - MJ.Graph.LINE_WIDTH;
+        return this.rightBoundLength() - 1 - MJ.BinaryTree.GraphNode.LINE_WIDTH;
     },
     rightBound: function () {
         if (!this.right) return this.rightX();
-        return this.right.topLineX() + 1 + MJ.Graph.X_SPACE;
+        return this.right.topLineX() + 1 + MJ.BinaryTree.GraphLayout.X_SPACE;
     },
     leftBound: function () {
         if (!this.left) return this.x;
-        return this.left.topLineX() - MJ.Graph.X_SPACE;
+        return this.left.topLineX() - MJ.BinaryTree.GraphLayout.X_SPACE;
     },
     balance: function (left, right) {
         if (!left || !right) return;
@@ -471,9 +511,11 @@ Ext.define('MJ.Graph.Node', {
 
         this.level = parent.level + 1;
     },
-    setString: function (string) {
-        this.string = string;
-        var result = MJ.textSize(MJ.Graph.FONT_SIZE + 'px', MJ.Graph.FONT_FAMILY, string);
+    setText: function (text) {
+        this.callParent(arguments);
+        var result = MJ.textSize(MJ.Graph.Layout.FONT_SIZE + 'px', MJ.Graph.Layout.FONT_FAMILY, text);
         this.width = result.width + 15;
     }
 });
+
+/*-----------------------------------------------------------------*/

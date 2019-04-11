@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>BinaryTreeGraph</title>
     <link rel="stylesheet" type="text/css" href="css/joint.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/index.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 <body>
 
 <div id="controls">
 
-    <div id="common">
+    <div id="common" class="box">
         <div class="type">
             类型：
             <select name="type">
@@ -19,78 +19,126 @@
                 <option value="2">AVL树</option>
             </select>
         </div>
-        <div class="arrow">
-            箭头样式：
-            <label for="elbow">
-                肘形
-                <input id="elbow" type="radio" name="link-type" checked>
-            </label>
-            <label for="line">
-                直线
-                <input id="line" type="radio" name="link-type">
-            </label>
+    </div>
+
+    <div class="control box" id="bt">
+        <h2>二叉树</h2>
+        <div class="content">
+            <div>
+                <div>
+                    <input type="text" class="node" placeholder="节点"><br>
+                    <input type="text" class="left" placeholder="左子节点"><br>
+                    <input type="text" class="right" placeholder="右子节点"><br>
+                </div>
+                <div>
+                    <input class="add" type="button" value="添加">
+                    <input class="remove" type="button" value="删除">
+                    <input class="clear" type="button" value="清空">
+                </div>
+            </div>
         </div>
     </div>
 
-    <hr>
-
-    <div id="bt">
-        <h2>二叉树（节点数：<span class="node-count">0</span>）</h2>
-        <div>
-            <input type="text" class="node" placeholder="节点">
-            <br>
-            <input type="text" class="left" placeholder="左子节点">
-            <br>
-            <input type="text" class="right" placeholder="右子节点">
-            <br>
-            <input class="add" type="button" value="添加">
-            <input class="remove" type="button" value="删除">
+    <div class="bst control box" id="bst" style="display: none">
+        <h2>二叉搜索树</h2>
+        <div class="content">
+            <!--<div class="link-type">-->
+                <!--箭头：-->
+                <!--<label for="bst-elbow">-->
+                    <!--肘形-->
+                    <!--<input class="elbow" id="bst-elbow" type="radio" name="bst-link-type" checked>-->
+                <!--</label>-->
+                <!--<label for="bst-line">-->
+                    <!--直线-->
+                    <!--<input class="line" id="bst-line" type="radio" name="bst-link-type">-->
+                <!--</label>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!--<div>-->
+                <!--<input type="text" class="max-count" placeholder="最大节点数(默认20)">-->
+                <!--<input type="text" class="max-value" placeholder="最大数值(默认100)">-->
+                <!--<input class="random" type="button" value="随机">-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<textarea name="" class="data" placeholder="请输入整数，数据之间用逗号隔开"></textarea>-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<input class="show" type="button" value="显示">-->
+                <!--<input class="add" type="button" value="添加">-->
+                <!--<input class="remove" type="button" value="删除">-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!--<div class="orders">-->
+                <!--所有节点(<span class="node-count">0</span>)：-->
+                <!--<select name="orders">-->
+                    <!--<option value="0">层序遍历</option>-->
+                    <!--<option value="1">前序遍历</option>-->
+                    <!--<option value="2">中序遍历</option>-->
+                    <!--<option value="3">后序遍历</option>-->
+                <!--</select>-->
+                <!--<div>-->
+                    <!--<textarea class="show-order" disabled="disabled" placeholder="遍历数据"></textarea>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 
-    <div id="bst" style="display: none">
-        <h2>二叉搜索树（节点数：<span class="node-count">0</span>）</h2>
-        <div>
-            <input type="text" class="max-count" placeholder="最大节点数量(默认20)">
-            <input type="text" class="max-value" placeholder="最大数值(默认100)">
-            <input class="random" type="button" value="随机">
-        </div>
-        <textarea name="" class="data" placeholder="请输入一棵二叉搜索树（仅限于整数），数据之间用逗号隔开"></textarea>
-        <div>
-            <input class="show" type="button" value="显示">
-            <input class="add" type="button" value="添加">
-            <input class="remove" type="button" value="删除">
-        </div>
-    </div>
-
-    <div id="avl" style="display: none">
-        <h2>AVL树（节点数：<span class="node-count">0</span>）</h2>
-        <div>
-            <input type="text" class="max-count" placeholder="最大节点数量(默认20)">
-            <input type="text" class="max-value" placeholder="最大数值(默认100)">
-            <input class="random" type="button" value="随机">
-        </div>
-        <textarea name="" class="data" placeholder="请输入一棵二叉搜索树（仅限于整数），数据之间用逗号隔开"></textarea>
-        <div>
-            <input class="show" type="button" value="显示">
-            <input class="add" type="button" value="添加">
-            <input class="remove" type="button" value="删除">
-        </div>
+    <div class="bst control box" id="avl" style="display: none">
+        <h2>AVL树</h2>
+        <div class="content"></div>
     </div>
 </div>
 
-<div id="paper"></div>
-
 <div id="ad">数据结构与算法教程，请戳链接：<a href="https://ke.qq.com/course/385223" target="_blank">《恋上数据结构与算法》</a></div>
+
+<div id="modules" style="display: none;">
+    <div class="paper"></div>
+
+    <div class="orders">
+        <div>
+            所有节点【<span class="node-count">0</span>】：
+            <select name="orders">
+                <option value="2">中序遍历</option>
+                <option value="0">层序遍历</option>
+                <option value="1">前序遍历</option>
+                <option value="3">后序遍历</option>
+            </select>
+        </div>
+        <div><textarea class="show-order" disabled="disabled" placeholder="遍历数据"></textarea></div>
+    </div>
+
+    <div class="link-type">
+        箭头：
+        <label>肘形<input class="elbow" type="radio" checked></label>
+        <label>直线<input class="line" type="radio"></label>
+    </div>
+
+    <div class="bst-input">
+        <div>
+            <input type="text" class="max-count" placeholder="最大随机数量">
+            <input type="text" class="max-value" placeholder="最大随机数值">
+            <input class="random" type="button" value="随机">
+        </div>
+        <div>
+            <textarea class="data"
+                      placeholder="请输入整数，数据之间用逗号或空格隔开&#10;【最大随机数量】默认【20】&#10;【最大随机数值】默认【100】"></textarea>
+        </div>
+        <div>
+            <input class="add" type="button" value="添加">
+            <input class="remove" type="button" value="删除">
+            <input class="clear" type="button" value="清空">
+        </div>
+    </div>
+</div>
 
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/lodash.min.js"></script>
 <script src="js/lib/backbone.min.js"></script>
 <script src="js/lib/joint.min.js"></script>
 <script src="js/lib/ext.min.js"></script>
-<script src="js/common.min.js"></script>
-<script src="js/tree.min.js"></script>
-<script src="js/graph.min.js"></script>
-<script src="js/index.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/tree.js"></script>
+<script src="js/graph.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>

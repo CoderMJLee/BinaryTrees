@@ -8,6 +8,8 @@ Ext.define('MJ.BinaryTreeInfo', {
     getString: function (node) { }
 });
 
+/*-----------------------------------------------------------------*/
+
 Ext.define('MJ.BinaryTree', {
     config: {
         size: 0,
@@ -106,22 +108,22 @@ Ext.define('MJ.BinaryTree', {
             } else { // node是父节点的右子树
                 node.parent.right = replacement;
             }
-            this.afterRemove(node, replacement);
+            this.afterRemove_(node, replacement);
             node.left = node.right = node.parent = null;
         } else if (!node.parent) { // node是根节点
             this.root = null;
-            this.afterRemove(node);
+            this.afterRemove_(node);
         } else { // node是叶子节点
             if (node === node.parent.left) {
                 node.parent.left = null;
             } else {
                 node.parent.right = null;
             }
-            this.afterRemove(node);
+            this.afterRemove_(node);
             node.parent = null;
         }
     },
-    afterRemove: function (node, replacement) {
+    afterRemove_: function (node, replacement) {
 
     },
     createNode: function (element, parent) {
@@ -130,17 +132,64 @@ Ext.define('MJ.BinaryTree', {
             parent: parent
         });
     },
-    inorderTraversal: function () {
+    preorderElements: function () {
+        if (this.size === 0) return null;
         var eles = [];
-        this._inorderTraversal(this.root, eles);
-        console.log(eles.join(','));
+        this._preorderElements(this.root, eles);
+        return eles;
     },
-    _inorderTraversal: function (node, eles) {
+    _preorderElements: function (node, eles) {
         if (!node) return;
 
-        this._inorderTraversal(node.left, eles);
-        eles.push(node.toString());
-        this._inorderTraversal(node.right, eles);
+        eles.push(node.element);
+        this._preorderElements(node.left, eles);
+        this._preorderElements(node.right, eles);
+    },
+    inorderElements: function () {
+        if (this.size === 0) return null;
+        var eles = [];
+        this._inorderElements(this.root, eles);
+        return eles;
+    },
+    _inorderElements: function (node, eles) {
+        if (!node) return;
+
+        this._inorderElements(node.left, eles);
+        eles.push(node.element);
+        this._inorderElements(node.right, eles);
+    },
+    postorderElements: function () {
+        if (this.size === 0) return null;
+        var eles = [];
+        this._postorderElements(this.root, eles);
+        return eles;
+    },
+    _postorderElements: function (node, eles) {
+        if (!node) return;
+
+        this._postorderElements(node.left, eles);
+        this._postorderElements(node.right, eles);
+        eles.push(node.element);
+    },
+    levelOrderElements: function () {
+        if (this.size === 0) return null;
+        var eles = [];
+        var queue = [];
+        queue.push(this.root);
+
+        while (queue.length > 0) {
+            var node = queue.shift();
+            eles.push(node.element);
+
+            if (node.left) {
+                queue.push(node.left);
+            }
+
+            if (node.right) {
+                queue.push(node.right);
+            }
+        }
+        return eles;
     },
     getLeft: function (node) {
         return node.left;
@@ -194,6 +243,8 @@ Ext.define('MJ.BinaryTree', {
     }
 });
 
+/*-----------------------------------------------------------------*/
+
 Ext.define('MJ.BinaryTree.Node', {
     config: {
         left: null,
@@ -229,6 +280,8 @@ Ext.define('MJ.BinaryTree.Node', {
     }
 });
 
+/*-----------------------------------------------------------------*/
+
 Ext.define('MJ.BinarySearchTree', {
     extend: 'MJ.BinaryTree',
     config: {
@@ -236,8 +289,8 @@ Ext.define('MJ.BinarySearchTree', {
         comparator: null
     },
     constructor: function (cfg) {
-        this.initConfig(cfg);
         this.callParent(arguments);
+        this.initConfig(cfg);
     },
     setElements: function (elements) {
         if (!Ext.isArray(elements)) return;
@@ -290,9 +343,9 @@ Ext.define('MJ.BinarySearchTree', {
         this.size++;
 
         // 添加之后
-        this.afterAdd(newNode);
+        this.afterAdd_(newNode);
     },
-    afterAdd: function (node) {
+    afterAdd_: function (node) {
 
     },
     _node: function(element) {
@@ -311,6 +364,8 @@ Ext.define('MJ.BinarySearchTree', {
     }
 });
 
+/*-----------------------------------------------------------------*/
+
 Ext.define('MJ.AVLTree', {
     extend: 'MJ.BinarySearchTree',
     constructor: function (cfg) {
@@ -324,7 +379,7 @@ Ext.define('MJ.AVLTree', {
             parent: parent
         });
     },
-    afterAdd: function (node) {
+    afterAdd_: function (node) {
         this.callParent(arguments);
 
         node = node.parent;
@@ -340,7 +395,7 @@ Ext.define('MJ.AVLTree', {
             node = node.parent;
         }
     },
-    afterRemove: function (node, replacement) {
+    afterRemove_: function (node, replacement) {
         this.callParent(arguments);
 
         node = node.parent;
@@ -413,11 +468,13 @@ Ext.define('MJ.AVLTree', {
     }
 });
 
+/*-----------------------------------------------------------------*/
+
 Ext.define('MJ.AVLTree.Node', {
     extend: 'MJ.BinaryTree.Node',
     constructor: function (cfg) {
-        this.initConfig(cfg);
         this.callParent(arguments);
+        this.initConfig(cfg);
 
     },
     isBalanced: function () {
@@ -434,3 +491,5 @@ Ext.define('MJ.AVLTree.Node', {
         this.height = 1 + Math.max(leftHeight, rightHeight);
     }
 });
+
+/*-----------------------------------------------------------------*/

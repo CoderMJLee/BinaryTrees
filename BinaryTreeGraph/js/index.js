@@ -9,9 +9,16 @@ Ext.define('MJ.Demo', {
         avlTree: new MJ.AVLTree(),
         bstTree: new MJ.BinarySearchTree(),
         btTree: new MJ.BinaryTree(),
+
+        POSTORDER: '3',
+        INORDER: '2',
+        PREORDER: '1',
+        LEVEL_ORDER: '0',
+
         SHOW_AVL: '2',
         SHOW_BST: '1',
         SHOW_BT: '0',
+
         $avlCtl: $('#avl'),
         $bstCtl: $('#bst'),
         $btCtl: $('#bt')
@@ -19,26 +26,66 @@ Ext.define('MJ.Demo', {
 });
 
 $(function () {
-    $('#paper')
-        .css('left', '390px')
-        .css('top', '10px');
+    initCommon();
+    initBt();
+    initBst(MJ.Demo.$bstCtl, MJ.Demo.bstTree);
+    initBst(MJ.Demo.$avlCtl, MJ.Demo.avlTree);
+    $('#modules').remove();
+});
 
-    $('#elbow').click(display);
-    
-    $('#line').click(display);
+function display() {
+    var $ctl = showingTreeCtl();
+    var linkType = MJ.BinaryTree.GraphLayout.LINK_TYPE_ELBOW;
+    if ($ctl.find('.link-type .line').is(':checked')) {
+        linkType = MJ.BinaryTree.GraphLayout.LINK_TYPE_LINE;
+    }
+    var $paper = $ctl.find('.paper, .joint-paper');
+    $paper.show();
+    var layout = new MJ.BinaryTree.GraphLayout({
+        tree: showingTree(),
+        linkType: linkType,
+        $paper: $paper
+    }).display();
 
+    $ctl.find('.node-count').text(layout.tree.size);
+    $ctl.find('.orders select').change();
+}
+
+function initCommon() {
     $('#common').find('.type select').change(function () {
         MJ.Demo.$avlCtl.hide();
         MJ.Demo.$bstCtl.hide();
         MJ.Demo.$btCtl.hide();
         showingTreeCtl().show();
+    });
+}
 
+function initBt() {
+    var $bt = MJ.Demo.$btCtl;
+    $bt.find('.add').click(function () {
+        MJ.Demo.btTree.add(
+            $bt.find('.node').val().trim(),
+            $bt.find('.left').val().trim(),
+            $bt.find('.right').val().trim()
+        );
+        display();
+    });
+    $bt.find('.remove').click(function () {
+        MJ.Demo.btTree.remove($bt.find('.node').val());
+        display();
+    });
+    $bt.find('.clear').click(function () {
+        MJ.Demo.btTree.clear();
         display();
     });
 
-    initBt();
-    initBst(MJ.Demo.$bstCtl, MJ.Demo.bstTree);
-    initBst(MJ.Demo.$avlCtl, MJ.Demo.avlTree);
+    // paper
+    $bt.append(clonePaper());
+    var $content = $bt.find('.content');
+    // 箭头
+    $content.prepend('<hr>').prepend(cloneLinkType($bt.attr('id')));
+    // 遍历
+    $content.append('<hr>').append(cloneOrders());
 
     // 初始化
     MJ.Demo.btTree.add("Life", "Animal", "Person");
@@ -46,7 +93,20 @@ $(function () {
     MJ.Demo.btTree.add("Animal", "Cat", "Dog");
     MJ.Demo.btTree.add("Dog", "Teddy", "SingleDog");
     display();
-});
+}
+
+function initBst($bstCtl, bstTree) {
+    // paper
+    $bstCtl.append(clonePaper());
+
+    var $content = $bstCtl.find('.content');
+    // 箭头
+    $content.append(cloneLinkType($bstCtl.attr('id'))).append('<hr>');
+    // 输入
+    $content.append(cloneBstInput(bstTree));
+    // 遍历
+    $content.append('<hr>').append(cloneOrders());
+}
 
 function showingTreeCtl() {
     var val = $('#common').find('.type select').val();
@@ -70,39 +130,64 @@ function showingTree() {
     }
 }
 
-function display() {
-    var linkType = MJ.Graph.LINK_TYPE_ELBOW;
-    if ($('#line').is(':checked')) {
-        linkType = MJ.Graph.LINK_TYPE_LINE;
-    }
-
-    var graph = new MJ.Graph({
-        tree: showingTree(),
-        linkType: linkType
-    }).display();
-
-    showingTreeCtl().find('h2 .node-count').text(graph.tree.size);
-}
-
-function initBst($bstCtl, bstTree) {
-    var $textarea = $bstCtl.find('.data');
-    $bstCtl.find('.show').click(function () {
-        var eles = $textarea.val().split(/\D+/i);
-        bstTree.clear();
-        for (var i in eles) {
-            bstTree.add(parseInt(eles[i].trim()));
+function cloneOrders() {
+    var $orders = clone('.orders');
+    $orders.find('select').change(function () {
+        var $this = $(this);
+        var orderTexts = null;
+        var order = $this.val();
+        var tree = showingTree();
+        if (order === MJ.Demo.LEVEL_ORDER) {
+            orderTexts = tree.levelOrderElements();
+        } else if (order === MJ.Demo.PREORDER) {
+            orderTexts = tree.preorderElements();
+        } else if (order === MJ.Demo.INORDER) {
+            orderTexts = tree.inorderElements();
+        } else if (order === MJ.Demo.POSTORDER) {
+            orderTexts = tree.postorderElements();
         }
-        display();
+        $this.parents('.orders').find('.show-order').text(orderTexts? orderTexts.join(', ') : '');
     });
 
-    $bstCtl.find('.random').click(function () {
-        var count = $bstCtl.find('.max-count').val();
+    return $orders;
+}
+
+function clonePaper() {
+    return clone('.paper').css('left', '390px').css('top', '15px');
+}
+
+function cloneLinkType(id) {
+    var $linkType = clone('.link-type');
+    var name = id + '-link-type';
+
+    var $elbow = $linkType.find('.elbow');
+    var elbowId = id + '-elbow';
+    $elbow.parents('label').attr('for', elbowId);
+    $elbow.attr('id', elbowId);
+    $elbow.attr('name', name);
+    $elbow.click(display);
+
+    var $line = $linkType.find('.line');
+    var lineId = id + '-line';
+    $line.parents('label').attr('for', lineId);
+    $line.attr('id', lineId);
+    $line.attr('name', name);
+    $line.click(display);
+    return $linkType;
+}
+
+function cloneBstInput(bstTree) {
+    var $bstInput = clone('.bst-input');
+    var $textarea = $bstInput.find('.data');
+
+    $bstInput.find('.random').click(function () {
+        var count = $bstInput.find('.max-count').val();
         if (Ext.isNumeric(count)) {
             count = parseInt(count);
         } else {
             count = MJ.Demo.randomMaxCount;
         }
-        var value = $bstCtl.find('.max-value').val();
+        var value = $bstInput.find('.max-value').val();
         if (Ext.isNumeric(value)) {
             value = parseInt(value);
         } else {
@@ -110,17 +195,18 @@ function initBst($bstCtl, bstTree) {
         }
 
         count = 1 + Math.floor(Math.random()*count);
-        var text = '';
+        var nums = [];
         for (var i = 0; i < count; i++) {
-            if (i !== 0) {
-                text += ',';
+            var num = null;
+            while (num === null || $.inArray(num, nums) !== -1) {
+                num = 1 + Math.floor(Math.random()*value)
             }
-            text += 1 + Math.floor(Math.random()*value);
+            nums.push(num);
         }
-        $textarea.val(text);
+        $textarea.val(nums.join(', '));
     });
 
-    $bstCtl.find('.add').click(function () {
+    $bstInput.find('.add').click(function () {
         var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
             bstTree.add(parseInt(eles[i].trim()));
@@ -128,134 +214,22 @@ function initBst($bstCtl, bstTree) {
         display();
     });
 
-    $bstCtl.find('.remove').click(function () {
+    $bstInput.find('.remove').click(function () {
         var eles = $textarea.val().split(/\D+/i);
         for (var i in eles) {
             bstTree.remove(parseInt(eles[i].trim()));
         }
         display();
     });
-}
 
-function initBt() {
-    var $bt = MJ.Demo.$btCtl;
-    $bt.find('.add').click(function () {
-        MJ.Demo.btTree.add(
-            $bt.find('.node').val().trim(),
-            $bt.find('.left').val().trim(),
-            $bt.find('.right').val().trim()
-        );
+    $bstInput.find('.clear').click(function () {
+        bstTree.clear();
         display();
     });
-    $bt.find('.remove').click(function () {
-        MJ.Demo.btTree.remove($bt.find('.node').val());
-        display();
-    });
+
+    return $bstInput;
 }
 
-/**
- * example1
- */
-function example1() {
-    var bst = new MJ.BinarySearchTree();
-    var count = Math.floor(1 + Math.random()*50);
-    for (var i = 0; i < count; i++) {
-        bst.add(Math.floor(Math.random()*1000))
-    }
-    var graph = new MJ.Graph({tree: bst});
-    graph.display();
-}
-
-/**
- * example2
- */
-function example2() {
-    var graph = new MJ.Graph();
-    graph.tree = {
-        getRoot: function () {
-            return "Life";
-        },
-        getLeft: function (node) {
-            if (node === "Life") return "Animal";
-            if (node === "Person") return "Man";
-            if (node === "Animal") return "Cat";
-            if (node === "Dog") return "Teddy";
-            return null;
-        },
-        getRight: function (node) {
-            if (node === "Life") return "Person";
-            if (node === "Person") return "Woman";
-            if (node === "Animal") return "Dog";
-            if (node === "Dog") return "SingleDog";
-            return null;
-        },
-        getString: function (node) {
-            return node;
-        }
-    };
-    graph.display();
-}
-
-Ext.define('MJ.Person', {
-    config: {
-        age: 0,
-        name: null
-    },
-    constructor: function (cfg) {
-        this.initConfig(cfg);
-    },
-    compareTo: function (other) {
-        var result =  this.age - other.age;
-        if (result === 0) {
-            result = (this.name > other.name) ? 1 : (this.name < other.name ? -1 : 0);
-        }
-        return result;
-    },
-    toString: function () {
-        return this.age + "_" + this.name;
-    }
-});
-
-function _addPersons(bst) {
-    bst.add(new MJ.Person({age: 14, name: 'Jake'}));
-    bst.add(new MJ.Person({age: 10, name: 'Michael'}));
-    bst.add(new MJ.Person({age: 17, name: 'Jim'}));
-    bst.add(new MJ.Person({age: 24, name: 'Kate'}));
-    bst.add(new MJ.Person({age: 25, name: 'Larry'}));
-    bst.add(new MJ.Person({age: 28, name: 'Michael'}));
-    bst.add(new MJ.Person({age: 16, name: 'Jackson'}));
-    bst.add(new MJ.Person({age: 24, name: 'Angela'}));
-    bst.add(new MJ.Person({age: 17, name: 'Rona'}));
-    bst.add(new MJ.Person({age: 30, name: 'Jim'}));
-}
-
-/**
- * example3
- */
-function example3() {
-    var bst = new MJ.BinarySearchTree();
-    _addPersons(bst);
-    new MJ.Graph({tree: bst}).display();
-}
-
-/**
- * example4
- */
-function example4() {
-    var bst = new MJ.BinarySearchTree({
-        comparator: {
-            compare: function (obj1, obj2) {
-                var result = (obj1.name > obj2.name) ? 1 : (obj1.name < obj2.name ? -1 : 0);
-                if (result === 0) {
-                    result =  obj1.age - obj2.age;
-                }
-                return result;
-            }
-        }
-    });
-    _addPersons(bst);
-
-    var graph = new MJ.Graph();
-    graph.tree = bst;
-    graph.display();
+function clone(sel) {
+    return $('#modules').find(sel).clone(true);
 }
