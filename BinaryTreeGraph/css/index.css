@@ -11,6 +11,7 @@ body {
 
 body, textarea, input {
     font-size: 14px;
+    color: #424242;
 }
 
 p,
@@ -81,6 +82,11 @@ textarea {
     outline: none;
 }
 
+textarea:disabled {
+    background-color: #EBECEE;
+    color: #424242;
+}
+
 #controls textarea {
     resize: none;
     width: 340px;
@@ -90,24 +96,24 @@ textarea {
 }
 
 #controls .show-order {
-    margin-top: 10px;
     overflow: auto;
+    margin-bottom: 0;
 }
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-    color: #999;
+    color: #bbb;
 }
 
 input:-moz-placeholder, textarea:-moz-placeholder {
-    color:#999;
+    color:#bbb;
 }
 
 input::-moz-placeholder, textarea::-moz-placeholder {
-    color:#999;
+    color:#bbb;
 }
 
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-    color:#999;
+    color:#bbb;
 }
 
 input[type="text"],
