@@ -135,7 +135,6 @@ Ext.define('MJ.BinaryTree.GraphLayout', {
     constructor: function (cfg) {
         this.callParent(arguments);
         this.initConfig(cfg);
-
         this._buildNodes();
     },
     buildCells_: function () {
