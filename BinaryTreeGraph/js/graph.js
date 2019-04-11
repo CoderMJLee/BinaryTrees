@@ -47,6 +47,27 @@ Ext.define('MJ.Graph.Layout', {
         var ty = (pHeight - this.height) >> 1;
         paper.translate(tx, ty);
         graph.addCells(cells);
+
+        // for (var index in cells) {
+        //     var cell = cells[index];
+        //     if (cell.newNode) {
+        //         if (cell.newNode.x !== cell.oldNode.x) {
+        //             cell.transition('position/x', cell.newNode.x, {
+        //                 duration: 1000}
+        //             );
+        //         }
+        //         if (cell.newNode.y !== cell.oldNode.y) {
+        //             cell.transition('position/y', cell.newNode.y, {
+        //                 duration: 1000}
+        //             );
+        //         }
+        //         if (cell.newNode.width !== cell.oldNode.width) {
+        //             cell.transition('size/width', cell.newNode.width, {
+        //                 duration: 1000}
+        //             );
+        //         }
+        //     }
+        // }
         return this;
     },
     buildCells_: function () { },
@@ -67,6 +88,7 @@ Ext.define('MJ.Graph.Layout', {
                 }
             };
         rect.attr(attr);
+        node.cell = rect;
         return rect;
     },
     createLink_: function (src, srcAnchor,
@@ -147,8 +169,18 @@ Ext.define('MJ.BinaryTree.GraphLayout', {
     },
     _buildCell: function (cells, node) {
         var rect = this.createRect_(node);
-        node.cell = rect;
         cells.push(rect);
+        // var btNode = node.btNode;
+        // if (btNode.graphNode) { // 说明btNode曾经显示过
+        //     rect = btNode.graphNode.cell;
+        //     rect.oldNode = btNode.graphNode;
+        //     rect.newNode = node;
+        //     rect.attr('label/text', node.text);
+        //     node.cell = rect;
+        // } else {
+        //     rect = this.createRect_(node);
+        // }
+        // btNode.graphNode = node;
 
         if (!node.parent) return;
 
