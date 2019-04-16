@@ -157,7 +157,6 @@ Ext.define('MJ.BinaryTree.GraphLayout', {
     constructor: function (cfg) {
         this.callParent(arguments);
         this.initConfig(cfg);
-        this._buildNodes();
     },
     buildCells_: function () {
         var cells = [];
@@ -169,6 +168,15 @@ Ext.define('MJ.BinaryTree.GraphLayout', {
     },
     _buildCell: function (cells, node) {
         var rect = this.createRect_(node);
+        if (node.btNode.$className === 'MJ.RBTree.Node') {
+            if (node.btNode.color === MJ.RBTree.BLACK) {
+                rect.attr('body/fill', '#000');
+                rect.attr('body/stroke', '#000');
+            } else {
+                rect.attr('body/fill', '#f00');
+                rect.attr('body/stroke', '#f00');
+            }
+        }
         cells.push(rect);
         // var btNode = node.btNode;
         // if (btNode.graphNode) { // 说明btNode曾经显示过
@@ -241,6 +249,8 @@ Ext.define('MJ.BinaryTree.GraphLayout', {
         return node;
     },
     _fillNodes: function () {
+        // var showNull = this.tree.$className === 'MJ.RBTree' && this.tree.showNull;
+
         // 第一行
         var firstRow = [];
         firstRow.push(this.root);

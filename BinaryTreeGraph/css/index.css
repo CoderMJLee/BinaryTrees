@@ -155,6 +155,16 @@ input[type="button"] {
     cursor: pointer;
 }
 
+input[type="button"]:disabled {
+    background-color: #999;
+    cursor: auto;
+}
+
 input[type="button"]:active {
     background-color: red;
+}
+
+#rb .show-null input {
+    margin-left: 10px;
+    vertical-align: middle;
 }

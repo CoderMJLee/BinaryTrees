@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>BinaryTreeGraph</title>
+    <link rel="icon" href="img/logo.ico" type="image/x-icon" >
     <link rel="stylesheet" type="text/css" href="css/joint.min.css" />
     <link rel="stylesheet" type="text/css" href="css/index.min.css" />
 </head>
@@ -17,6 +18,7 @@
                 <option value="0">二叉树</option>
                 <option value="1">二叉搜索树</option>
                 <option value="2">AVL树</option>
+                <option value="3">红黑树</option>
             </select>
         </div>
     </div>
@@ -47,6 +49,16 @@
     <div class="bst control box" id="avl" style="display: none">
         <h2>AVL树</h2>
         <div class="content"></div>
+    </div>
+
+    <div class="bst control box" id="rb" style="display: none">
+        <h2>红黑树</h2>
+        <div class="content">
+            <!--<div class="show-null">-->
+                <!--<label>显示空节点<input type="checkbox"></label>-->
+            <!--</div>-->
+            <!--<hr>-->
+        </div>
     </div>
 </div>
 
@@ -98,7 +110,11 @@
 <script src="js/lib/joint.min.js"></script>
 <script src="js/lib/ext.min.js"></script>
 <script src="js/common.min.js"></script>
-<script src="js/tree.min.js"></script>
+<script src="js/tree/BinaryTree.min.js"></script>
+<script src="js/tree/BST.min.js"></script>
+<script src="js/tree/BBST.min.js"></script>
+<script src="js/tree/AVLTree.min.js"></script>
+<script src="js/tree/RBTree.min.js"></script>
 <script src="js/graph.min.js"></script>
 <script src="js/index.min.js"></script>
 </body>

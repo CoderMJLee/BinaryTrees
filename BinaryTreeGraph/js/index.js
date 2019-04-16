@@ -6,8 +6,9 @@ Ext.define('MJ.Demo', {
     statics: {
         randomMaxCount: 20,
         randomMaxValue: 100,
+        rbTree: new MJ.RBTree(),
         avlTree: new MJ.AVLTree(),
-        bstTree: new MJ.BinarySearchTree(),
+        bstTree: new MJ.BST(),
         btTree: new MJ.BinaryTree(),
 
         POSTORDER: '3',
@@ -15,10 +16,12 @@ Ext.define('MJ.Demo', {
         PREORDER: '1',
         LEVEL_ORDER: '0',
 
+        SHOW_RB: '3',
         SHOW_AVL: '2',
         SHOW_BST: '1',
         SHOW_BT: '0',
 
+        $rbCtl: $('#rb'),
         $avlCtl: $('#avl'),
         $bstCtl: $('#bst'),
         $btCtl: $('#bt')
@@ -30,6 +33,8 @@ $(function () {
     initBt();
     initBst(MJ.Demo.$bstCtl, MJ.Demo.bstTree);
     initBst(MJ.Demo.$avlCtl, MJ.Demo.avlTree);
+    initBst(MJ.Demo.$rbCtl, MJ.Demo.rbTree);
+    initRb();
     $('#modules').remove();
 });
 
@@ -56,6 +61,7 @@ function initCommon() {
         MJ.Demo.$avlCtl.hide();
         MJ.Demo.$bstCtl.hide();
         MJ.Demo.$btCtl.hide();
+        MJ.Demo.$rbCtl.hide();
         showingTreeCtl().show();
     });
 }
@@ -108,6 +114,13 @@ function initBst($bstCtl, bstTree) {
     $content.append('<hr>').append(cloneOrders());
 }
 
+function initRb() {
+    MJ.Demo.$rbCtl.find('.show-null input').click(function () {
+        MJ.Demo.rbTree.showNull = $(this).is(':checked');
+        display();
+    });
+}
+
 function showingTreeCtl() {
     var val = $('#common').find('.type select').val();
     if (val === MJ.Demo.SHOW_BT) {
@@ -116,6 +129,8 @@ function showingTreeCtl() {
         return MJ.Demo.$bstCtl;
     } else if (val === MJ.Demo.SHOW_AVL) {
         return MJ.Demo.$avlCtl;
+    } else if (val === MJ.Demo.SHOW_RB) {
+        return MJ.Demo.$rbCtl;
     }
 }
 
@@ -127,6 +142,8 @@ function showingTree() {
         return MJ.Demo.bstTree;
     } else if (val === MJ.Demo.SHOW_AVL) {
         return MJ.Demo.avlTree;
+    } else if (val === MJ.Demo.SHOW_RB) {
+        return MJ.Demo.rbTree;
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * Created by MJ Lee on 2019/4/6.
+ * Created by MJ Lee on 2019/4/16.
  */
 Ext.define('MJ.BinaryTreeInfo', {
     getRoot: function () { },
@@ -101,29 +101,33 @@ Ext.define('MJ.BinaryTree', {
         var replacement = node.left ? node.left : node.right;
         if (replacement) { // node是度为1的节点
             replacement.parent = node.parent;
+            var isLeft = false;
             if (!node.parent) {
                 this.root = replacement;
             } else if (node.parent.left === node) { // node是父节点的左子树
                 node.parent.left = replacement;
+                isLeft = true;
             } else { // node是父节点的右子树
                 node.parent.right = replacement;
             }
-            this.afterRemove_(node, replacement);
+            this.afterRemove_(node, isLeft, replacement);
             node.left = node.right = node.parent = null;
         } else if (!node.parent) { // node是根节点
             this.root = null;
             this.afterRemove_(node);
         } else { // node是叶子节点
+            var isLeft = false;
             if (node === node.parent.left) {
                 node.parent.left = null;
+                isLeft = true;
             } else {
                 node.parent.right = null;
             }
-            this.afterRemove_(node);
+            this.afterRemove_(node, isLeft);
             node.parent = null;
         }
     },
-    afterRemove_: function (node, replacement) {
+    afterRemove_: function (node, isLeft, replacement) {
 
     },
     createNode: function (element, parent) {
@@ -131,6 +135,20 @@ Ext.define('MJ.BinaryTree', {
             element: element,
             parent: parent
         });
+    },
+    preorderNodes: function () {
+        if (this.size === 0) return null;
+        var eles = [];
+        this._preorderNodes(this.root, eles);
+        return eles;
+    },
+    _preorderNodes: function (node, eles) {
+        if (!node) return;
+
+        eles.push(node);
+        console.log(node);
+        this._preorderNodes(node.left, eles);
+        this._preorderNodes(node.right, eles);
     },
     preorderElements: function () {
         if (this.size === 0) return null;
@@ -277,218 +295,14 @@ Ext.define('MJ.BinaryTree.Node', {
         if (leftHeight > rightHeight) return this.left;
         if (rightHeight > leftHeight) return this.right;
         return this.isLeftChild() ? this.left : this.right;
-    }
-});
-
-/*-----------------------------------------------------------------*/
-
-Ext.define('MJ.BinarySearchTree', {
-    extend: 'MJ.BinaryTree',
-    config: {
-        // MJ.Comparator
-        comparator: null
     },
-    constructor: function (cfg) {
-        this.callParent(arguments);
-        this.initConfig(cfg);
+    sibling: function () {
+        if (this.isLeftChild()) return this.parent.right;
+        if (this.isRightChild()) return this.parent.left;
+        return null;
     },
-    setElements: function (elements) {
-        if (!Ext.isArray(elements)) return;
-        for (var index in elements) {
-            this.add(elements[index]);
-        }
-        this.elements = elements;
-    },
-    _compare: function (element1, element2) {
-        // Comparator
-        if (this.comparator) {
-            return this.comparator.compare(element1, element2);
-        }
-
-        // Comparable
-        return MJ.Comparator.compare(element1, element2);
-    },
-    add: function (element) {
-        if (!element) return;
-
-        if (!this.root) {
-            this.root = this.createNode(element);
-            this.size++;
-            return;
-        }
-
-        // 找出父节点
-        var parent = this.root;
-        var node = this.root;
-        var cmp = 0;
-        while (node !== null) {
-            cmp = this._compare(element, node.element);
-            parent = node;
-            if (cmp > 0) {
-                node = node.right;
-            } else if (cmp < 0) {
-                node = node.left;
-            } else {
-                node.element = element;
-                return;
-            }
-        }
-
-        var newNode = this.createNode(element, parent);
-        if (cmp > 0) {
-            parent.right = newNode;
-        } else {
-            parent.left = newNode;
-        }
-        this.size++;
-
-        // 添加之后
-        this.afterAdd_(newNode);
-    },
-    afterAdd_: function (node) {
-
-    },
-    _node: function(element) {
-        if(!element) return null;
-        var node = this.root;
-        while (node) {
-            var cmp = this._compare(element, node.element);
-            if (cmp === 0) return node;
-            if (cmp > 0) {
-                node = node.right;
-            } else {
-                node = node.left;
-            }
-        }
-        return node;
-    }
-});
-
-/*-----------------------------------------------------------------*/
-
-Ext.define('MJ.AVLTree', {
-    extend: 'MJ.BinarySearchTree',
-    constructor: function (cfg) {
-        this.initConfig(cfg);
-        this.callParent(arguments);
-
-    },
-    createNode: function (element, parent) {
-        return new MJ.AVLTree.Node({
-            element: element,
-            parent: parent
-        });
-    },
-    afterAdd_: function (node) {
-        this.callParent(arguments);
-
-        node = node.parent;
-        while (node) {
-            if (node.isBalanced()) {
-                // 更新高度
-                node.updateHeight();
-            } else {
-                // 恢复平衡
-                this.rebalance(node);
-                break;
-            }
-            node = node.parent;
-        }
-    },
-    afterRemove_: function (node, replacement) {
-        this.callParent(arguments);
-
-        node = node.parent;
-        while (node) {
-            if (node.isBalanced()) {
-                node.updateHeight();
-            } else {
-                this.rebalance(node);
-            }
-            node = node.parent;
-        }
-    },
-    afterRotate: function (g, p, c) {
-        // 子树的根节点嫁接到原树中
-        if (g.isLeftChild()) {
-            g.parent.left = p;
-        } else if (g.isRightChild()) {
-            g.parent.right = p;
-        } else {
-            this.root = p;
-        }
-
-        // parent维护
-        if (c) {
-            c.parent = g;
-        }
-        p.parent = g.parent;
-        g.parent = p;
-
-        // 更新高度（先更新比较矮的g，再更新比较高的p）
-        g.updateHeight();
-        p.updateHeight();
-    },
-    leftRotate: function (g) {
-        // 交换子树
-        var p = g.right;
-        var c = p.left;
-        g.right = c;
-        p.left = g;
-        // 维护parent和height
-        this.afterRotate(g, p, c);
-    },
-    rightRotate: function (g) {
-        // 交换子树
-        var p = g.left;
-        var c = p.right;
-        g.left = c;
-        p.right = g;
-        // 维护parent和height
-        this.afterRotate(g, p, c);
-    },
-    rebalance: function (g) {
-        p = g.tallerChild();
-        n = p.tallerChild();
-        if (p.isLeftChild()) { // L
-            if (n.isLeftChild()) { // LL
-                this.rightRotate(g);
-            } else { // LR
-                this.leftRotate(p);
-                this.rightRotate(g);
-            }
-        } else { // R
-            if (n.isLeftChild()) { // RL
-                this.rightRotate(p);
-                this.leftRotate(g);
-            } else { // RR
-                this.leftRotate(g);
-            }
-        }
-    }
-});
-
-/*-----------------------------------------------------------------*/
-
-Ext.define('MJ.AVLTree.Node', {
-    extend: 'MJ.BinaryTree.Node',
-    constructor: function (cfg) {
-        this.callParent(arguments);
-        this.initConfig(cfg);
-
-    },
-    isBalanced: function () {
-        return Math.abs(this.balanceFactor()) <= 1;
-    },
-    balanceFactor: function () {
-        var leftHeight = this.left ? this.left.height : 0;
-        var rightHeight = this.right ? this.right.height : 0;
-        return leftHeight - rightHeight;
-    },
-    updateHeight: function () {
-        var leftHeight = this.left ? this.left.height : 0;
-        var rightHeight = this.right ? this.right.height : 0;
-        this.height = 1 + Math.max(leftHeight, rightHeight);
+    uncle: function () {
+        return this.parent ? this.parent.sibling() : null;
     }
 });
 
