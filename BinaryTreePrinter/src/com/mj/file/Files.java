@@ -1,5 +1,6 @@
 package com.mj.file;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -14,9 +15,11 @@ public class Files {
 				file.createNewFile();
 			}
 			
-			FileWriter writer = new FileWriter(file, false);
-			writer.write(data.toString());
-			writer.close();
+			try (FileWriter writer = new FileWriter(file, false);
+					BufferedWriter out = new BufferedWriter(writer) ) {
+				out.write(data.toString());
+                out.flush();
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
