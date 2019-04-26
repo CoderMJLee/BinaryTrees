@@ -27,7 +27,11 @@ Ext.define('MJ.Demo', {
         $rbCtl: $('#rb'),
         $avlCtl: $('#avl'),
         $bstCtl: $('#bst'),
-        $btCtl: $('#bt')
+        $btCtl: $('#bt'),
+
+        LINK_TYPE_ELBOW: MJ.BinaryTree.GraphLayout.LINK_TYPE_ELBOW,
+        LINK_TYPE_LINE: MJ.BinaryTree.GraphLayout.LINK_TYPE_LINE,
+        linkType : MJ.BinaryTree.GraphLayout.LINK_TYPE_ELBOW,
     }
 });
 
@@ -45,25 +49,25 @@ $(function () {
 
 function display() {
     var $ctl = showingTreeCtl();
-    var linkType = MJ.BinaryTree.GraphLayout.LINK_TYPE_ELBOW;
-    if ($ctl.find('.link-type .line').is(':checked')) {
-        linkType = MJ.BinaryTree.GraphLayout.LINK_TYPE_LINE;
-    }
     var $paper = $ctl.find('.paper, .joint-paper');
     $paper.show();
 
-    if ($ctl === MJ.Demo.$bhCtl) {
-        MJ.Demo.binaryHeap.maxHeap = $ctl.find('.max-heap').is(':checked');
-    }
-
     var layout = new MJ.BinaryTree.GraphLayout({
         tree: showingTree(),
-        linkType: linkType,
+        linkType: MJ.Demo.linkType,
         $paper: $paper
     }).display();
 
     $ctl.find('.node-count').text(layout.tree.size);
     $ctl.find('.orders select').change();
+}
+
+function linkType() {
+    var linkType = MJ.Demo.LINK_TYPE_ELBOW;
+    if (showingTreeCtl().find('.link-type .line').is(':checked')) {
+        linkType = MJ.Demo.LINK_TYPE_LINE;
+    }
+    return linkType;
 }
 
 function initCommon() {
@@ -74,6 +78,8 @@ function initCommon() {
         MJ.Demo.$rbCtl.hide();
         MJ.Demo.$bhCtl.hide();
         showingTreeCtl().show();
+
+        MJ.Demo.linkType = linkType();
     });
 }
 
@@ -82,16 +88,19 @@ function initBh() {
     $bh.append(clonePaper());
     var $content = $bh.find('.content');
     // 箭头
-    $content.append('<hr>').append(cloneLinkType($bh.attr('id'))).append('<hr>');
+    $content.prepend('<hr>').prepend(cloneLinkType($bh.attr('id'))).append('<hr>');
     // 输入
     $content.append(cloneBstInput(MJ.Demo.binaryHeap));
     $content.find('.heap-type input').click(function () {
         var maxHeap = MJ.Demo.binaryHeap.maxHeap;
         MJ.Demo.binaryHeap.maxHeap = $content.find('.max-heap').is(':checked');
-        if (maxHeap !== MJ.Demo.binaryHeap.maxHeap) {
-            MJ.Demo.binaryHeap.heapify();
-            display();
-        }
+        if (maxHeap === MJ.Demo.binaryHeap.maxHeap) return;
+
+        // 判断root放后面
+        if (!MJ.Demo.binaryHeap.getRoot()) return;
+
+        MJ.Demo.binaryHeap.heapify();
+        display();
     });
 }
 
@@ -106,10 +115,14 @@ function initBt() {
         display();
     });
     $bt.find('.remove').click(function () {
+        if (!MJ.Demo.btTree.getRoot()) return;
+
         MJ.Demo.btTree.remove($bt.find('.node').val());
         display();
     });
     $bt.find('.clear').click(function () {
+        if (!MJ.Demo.btTree.getRoot()) return;
+
         MJ.Demo.btTree.clear();
         display();
     });
@@ -210,19 +223,30 @@ function cloneLinkType(id) {
     var $linkType = clone('.link-type');
     var name = id + '-link-type';
 
+    var linkFn = function () {
+        var oldLinkType = MJ.Demo.linkType;
+        MJ.Demo.linkType = linkType();
+        if (MJ.Demo.linkType === oldLinkType) return;
+
+        // 判断root放后面
+        if (!showingTree().getRoot()) return;
+
+        display();
+    };
+
     var $elbow = $linkType.find('.elbow');
     var elbowId = id + '-elbow';
     $elbow.parents('label').attr('for', elbowId);
     $elbow.attr('id', elbowId);
     $elbow.attr('name', name);
-    $elbow.click(display);
+    $elbow.click(linkFn);
 
     var $line = $linkType.find('.line');
     var lineId = id + '-line';
     $line.parents('label').attr('for', lineId);
     $line.attr('id', lineId);
     $line.attr('name', name);
-    $line.click(display);
+    $line.click(linkFn);
     return $linkType;
 }
 
@@ -265,6 +289,8 @@ function cloneBstInput(bstTree) {
     });
 
     $bstInput.find('.remove').click(function () {
+        if (!bstTree.getRoot()) return;
+
         if (bstTree === MJ.Demo.binaryHeap) {
             bstTree.remove();
         } else {
@@ -277,6 +303,8 @@ function cloneBstInput(bstTree) {
     });
 
     $bstInput.find('.clear').click(function () {
+        if (!bstTree.getRoot()) return;
+
         bstTree.clear();
         display();
     });

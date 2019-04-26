@@ -3,6 +3,11 @@
     box-sizing: border-box;
 }
 
+select {
+    line-height: 25px;
+    height: 25px;
+}
+
 body {
     padding: 15px;
     margin: 0;

@@ -5,15 +5,15 @@
 - 用于展示二叉树的图形化小工具（Graph for displaying a binary tree）
   - - 在线演示：[BinaryTreeGraph](http://520it.com/binarytrees/)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426133959395-979296986.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426144618950-1992989113.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426134039462-857207776.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426144622883-1736652037.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426134140142-191905053.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426144627187-1212361005.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190416163846204-1576715789.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426144632113-1136919830.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426112330676-374931119.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426144636366-250176607.png)
 
 ## BinaryTreePrinter（Java版本）
 ### 简介（Intro）
