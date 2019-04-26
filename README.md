@@ -191,3 +191,42 @@ BinaryTrees.println(new BinaryTreeInfo() {
 ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100247015-1301544281.png)
 
 ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190406100252563-950745142.png)
+
+- 二叉堆
+```java
+public class BinaryHeap<E> implements BinaryTreeInfo {
+	private int size;
+	private E[] elements;
+
+	@Override
+	public Object root() {
+		return 0;
+	}
+
+	@Override
+	public Object left(Object node) {
+		int leftIndex = ((int)node << 1) + 1;
+		if (leftIndex >= size) return null;
+		return leftIndex;
+	}
+
+	@Override
+	public Object right(Object node) {
+		int rightIndex = ((int)node << 1) + 2;
+		if (rightIndex >= size) return null;
+		return rightIndex;
+	}
+
+	@Override
+	public Object string(Object node) {
+		return elements[(int) node];
+	}
+}
+
+BinaryHeap<Integer> heap = new BinaryHeap<>();
+for (int i = 0; i < 10; i++) {
+	heap.add((int)(Math.random() * 100));
+}
+BinaryTrees.println(heap);
+```
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426114408842-867838307.png)
