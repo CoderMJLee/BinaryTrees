@@ -10,17 +10,20 @@ Ext.define('MJ.Demo', {
         avlTree: new MJ.AVLTree(),
         bstTree: new MJ.BST(),
         btTree: new MJ.BinaryTree(),
+        binaryHeap: new MJ.BinaryHeap(),
 
         POSTORDER: '3',
         INORDER: '2',
         PREORDER: '1',
         LEVEL_ORDER: '0',
 
+        SHOW_BH: '4',
         SHOW_RB: '3',
         SHOW_AVL: '2',
         SHOW_BST: '1',
         SHOW_BT: '0',
 
+        $bhCtl: $('#bh'),
         $rbCtl: $('#rb'),
         $avlCtl: $('#avl'),
         $bstCtl: $('#bst'),
@@ -35,6 +38,8 @@ $(function () {
     initBst(MJ.Demo.$avlCtl, MJ.Demo.avlTree);
     initBst(MJ.Demo.$rbCtl, MJ.Demo.rbTree);
     initRb();
+    initBh();
+
     $('#modules').remove();
 });
 
@@ -46,6 +51,11 @@ function display() {
     }
     var $paper = $ctl.find('.paper, .joint-paper');
     $paper.show();
+
+    if ($ctl === MJ.Demo.$bhCtl) {
+        MJ.Demo.binaryHeap.maxHeap = $ctl.find('.max-heap').is(':checked');
+    }
+
     var layout = new MJ.BinaryTree.GraphLayout({
         tree: showingTree(),
         linkType: linkType,
@@ -62,7 +72,26 @@ function initCommon() {
         MJ.Demo.$bstCtl.hide();
         MJ.Demo.$btCtl.hide();
         MJ.Demo.$rbCtl.hide();
+        MJ.Demo.$bhCtl.hide();
         showingTreeCtl().show();
+    });
+}
+
+function initBh() {
+    var $bh = MJ.Demo.$bhCtl;
+    $bh.append(clonePaper());
+    var $content = $bh.find('.content');
+    // 箭头
+    $content.append('<hr>').append(cloneLinkType($bh.attr('id'))).append('<hr>');
+    // 输入
+    $content.append(cloneBstInput(MJ.Demo.binaryHeap));
+    $content.find('.heap-type input').click(function () {
+        var maxHeap = MJ.Demo.binaryHeap.maxHeap;
+        MJ.Demo.binaryHeap.maxHeap = $content.find('.max-heap').is(':checked');
+        if (maxHeap !== MJ.Demo.binaryHeap.maxHeap) {
+            MJ.Demo.binaryHeap.heapify();
+            display();
+        }
     });
 }
 
@@ -131,6 +160,8 @@ function showingTreeCtl() {
         return MJ.Demo.$avlCtl;
     } else if (val === MJ.Demo.SHOW_RB) {
         return MJ.Demo.$rbCtl;
+    } else if (val === MJ.Demo.SHOW_BH) {
+        return MJ.Demo.$bhCtl;
     }
 }
 
@@ -144,6 +175,8 @@ function showingTree() {
         return MJ.Demo.avlTree;
     } else if (val === MJ.Demo.SHOW_RB) {
         return MJ.Demo.rbTree;
+    } else if (val === MJ.Demo.SHOW_BH) {
+        return MJ.Demo.binaryHeap;
     }
 }
 
@@ -232,9 +265,13 @@ function cloneBstInput(bstTree) {
     });
 
     $bstInput.find('.remove').click(function () {
-        var eles = $textarea.val().split(/\D+/i);
-        for (var i in eles) {
-            bstTree.remove(parseInt(eles[i].trim()));
+        if (bstTree === MJ.Demo.binaryHeap) {
+            bstTree.remove();
+        } else {
+            var eles = $textarea.val().split(/\D+/i);
+            for (var i in eles) {
+                bstTree.remove(parseInt(eles[i].trim()));
+            }
         }
         display();
     });

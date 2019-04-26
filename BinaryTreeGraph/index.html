@@ -19,6 +19,7 @@
                 <option value="1">二叉搜索树</option>
                 <option value="2">AVL树</option>
                 <option value="3">红黑树</option>
+                <option value="4">二叉堆</option>
             </select>
         </div>
     </div>
@@ -53,11 +54,17 @@
 
     <div class="bst control box" id="rb" style="display: none">
         <h2>红黑树</h2>
+        <div class="content"></div>
+    </div>
+
+    <div class="bst control box" id="bh" style="display: none">
+        <h2>二叉堆</h2>
         <div class="content">
-            <!--<div class="show-null">-->
-                <!--<label>显示空节点<input type="checkbox"></label>-->
-            <!--</div>-->
-            <!--<hr>-->
+            <div class="heap-type">
+                类型：
+                <label>最大堆<input class="max-heap" name="heap-type" type="radio" checked></label>
+                <label>最小堆<input class="min-heap" name="heap-type" type="radio"></label>
+            </div>
         </div>
     </div>
 </div>
@@ -115,6 +122,8 @@
 <script src="js/tree/BBST.min.js"></script>
 <script src="js/tree/AVLTree.min.js"></script>
 <script src="js/tree/RBTree.min.js"></script>
+<script src="js/heap/Heap.min.js"></script>
+<script src="js/heap/BinaryHeap.min.js"></script>
 <script src="js/graph.min.js"></script>
 <script src="js/index.min.js"></script>
 </body>
