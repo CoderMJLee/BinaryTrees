@@ -5,11 +5,11 @@
 - 用于展示二叉树的图形化小工具（Graph for displaying a binary tree）
   - - 在线演示：[BinaryTreeGraph](http://520it.com/binarytrees/)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190411181407782-189771449.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426133959395-979296986.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190411181416438-864400711.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426134039462-857207776.png)
 
-![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190411181425642-1603723382.png)
+![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426134140142-191905053.png)
 
 ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190416163846204-1576715789.png)
 
