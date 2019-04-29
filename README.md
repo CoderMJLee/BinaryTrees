@@ -1,3 +1,9 @@
+- [BinaryTreeGraph（JS版本）](#binarytreegraphjs版本)
+- [BinaryTreePrinter（Java版本）](#binarytreeprinterjava版本)
+	- [简介（Intro）](#简介intro)
+	- [核心API（Core API）](#核心apicore-api)
+	- [示例（Example）](#示例example)
+	
 # BinaryTrees
 - 一些二叉树相关的操作(Some operations for binary tree)
 
