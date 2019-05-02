@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol MJBinaryTreeInfo
+@protocol MJBinaryTreeInfo <NSObject>
 @required
 /**
  * who is the root node

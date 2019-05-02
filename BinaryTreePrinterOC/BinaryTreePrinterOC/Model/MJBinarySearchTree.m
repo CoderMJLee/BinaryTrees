@@ -31,7 +31,8 @@
 {
     NSUInteger _size;
     MJBSTNode *_root;
-    MJBSTComparator _comparator;
+    MJBSTComparatorBlock _comparatorBlock;
+    id<MJBSTComparator> _comparator;
 }
 @end
 
@@ -41,7 +42,13 @@
     return [self treeWithComparator:nil];
 }
 
-+ (instancetype)treeWithComparator:(_Nullable MJBSTComparator)comparator {
++ (instancetype)treeWithComparatorBlock:(_Nullable MJBSTComparatorBlock)comparatorBlock {
+    MJBinarySearchTree *bst = [[self alloc] init];
+    bst->_comparatorBlock = comparatorBlock;
+    return bst;
+}
+
++ (instancetype)treeWithComparator:(id<MJBSTComparator>)comparator {
     MJBinarySearchTree *bst = [[self alloc] init];
     bst->_comparator = comparator;
     return bst;
@@ -91,7 +98,8 @@
 
 #pragma mark - private methods
 - (int)_compare:(id)e1 e2:(id)e2 {
-    return _comparator ? _comparator(e1, e2) : [e1 compare:e2];
+    return _comparatorBlock ? _comparatorBlock(e1, e2) :
+    (_comparator ? [_comparator compare:e1 another:e2] : [e1 compare:e2]);
 }
 
 #pragma mark - MJBinaryTreeInfo

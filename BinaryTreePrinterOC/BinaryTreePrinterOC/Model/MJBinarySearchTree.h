@@ -11,7 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef int (^MJBSTComparator)(id e1, id e2);
+@protocol MJBSTComparator
+@required
+- (int)compare:(id)e1 another:(id)e2;
+@end
+
+typedef int (^MJBSTComparatorBlock)(id e1, id e2);
 
 @interface MJBinarySearchTree : NSObject <MJBinaryTreeInfo>
 - (NSUInteger)size;
@@ -19,7 +24,8 @@ typedef int (^MJBSTComparator)(id e1, id e2);
 - (void)add:(id)element;
 
 + (instancetype)tree;
-+ (instancetype)treeWithComparator:(_Nullable MJBSTComparator)comparator;
++ (instancetype)treeWithComparatorBlock:(_Nullable MJBSTComparatorBlock)comparator;
++ (instancetype)treeWithComparator:(_Nullable id<MJBSTComparator>)comparator;
 @end
 
 NS_ASSUME_NONNULL_END

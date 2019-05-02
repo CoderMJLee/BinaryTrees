@@ -30,6 +30,7 @@ public class LevelOrderPrinter extends Printer {
 	private Node root;
 	private int minX;
 	private int maxWidth;
+	private List<List<Node>> nodes;
 
 	public LevelOrderPrinter(BinaryTreeInfo tree) {
 		super(tree);
@@ -41,11 +42,12 @@ public class LevelOrderPrinter extends Printer {
 	@Override
 	public String printString() {
 		// nodes用来存放所有的节点
-		List<List<Node>> nodes = new ArrayList<>();
-		fillNodes(nodes);
-		cleanNodes(nodes);
-		compressNodes(nodes);
-		addLineNodes(nodes);
+		nodes = new ArrayList<>();
+		
+		fillNodes();
+		cleanNodes();
+		compressNodes();
+		addLineNodes();
 		
 		int rowCount = nodes.size();
 
@@ -88,8 +90,7 @@ public class LevelOrderPrinter extends Printer {
 	/**
 	 * 以满二叉树的形式填充节点
 	 */
-	private void fillNodes(List<List<Node>> nodes) {
-		if (nodes == null) return;
+	private void fillNodes() {
 		// 第一行
 		List<Node> firstRowNodes = new ArrayList<>();
 		firstRowNodes.add(root);
@@ -131,9 +132,7 @@ public class LevelOrderPrinter extends Printer {
 	/**
 	 * 删除全部null、更新节点的坐标
 	 */
-	private void cleanNodes(List<List<Node>> nodes) {
-		if (nodes == null) return;
-
+	private void cleanNodes() {
 		int rowCount = nodes.size();
 		if (rowCount < 2) return;
 
@@ -184,9 +183,7 @@ public class LevelOrderPrinter extends Printer {
 	/**
 	 * 压缩空格
 	 */
-	private void compressNodes(List<List<Node>> nodes) {
-		if (nodes == null) return;
-
+	private void compressNodes() {
 		int rowCount = nodes.size();
 		if (rowCount < 2) return;
 
@@ -282,7 +279,7 @@ public class LevelOrderPrinter extends Printer {
 		return top;
 	}
 
-	private void addLineNodes(List<List<Node>> nodes) {
+	private void addLineNodes() {
 		List<List<Node>> newNodes = new ArrayList<>();
 
 		int rowCount = nodes.size();
