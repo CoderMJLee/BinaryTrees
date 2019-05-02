@@ -426,8 +426,7 @@ public class LevelOrderPrinter extends Printer {
 		 * 让left和right基于this对称
 		 */
 		private void balance(Node left, Node right) {
-			if (left == null || right == null)
-				return;
+			if (left == null || right == null) return;
 			// 【left的尾字符】与【this的首字符】之间的间距
 			int deltaLeft = x - left.rightX();
 			// 【this的尾字符】与【this的首字符】之间的间距

@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D13E67E227A9E1E00848EA5 /* MJBinarySearchTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D13E67D227A9E1E00848EA5 /* MJBinarySearchTree.m */; };
+		2DB14FE52279F0A100DAB500 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FE42279F0A100DAB500 /* main.m */; };
+		2DB14FEE2279F0CB00DAB500 /* MJBinaryTrees.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FED2279F0CB00DAB500 /* MJBinaryTrees.m */; };
+		2DB14FF12279F1C000DAB500 /* MJPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FF02279F1C000DAB500 /* MJPrinter.m */; };
+		2DB14FF42279F1D600DAB500 /* MJLevelOrderPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FF32279F1D600DAB500 /* MJLevelOrderPrinter.m */; };
+		2DB14FF72279F1E600DAB500 /* MJInorderPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FF62279F1E600DAB500 /* MJInorderPrinter.m */; };
+		2DB14FFA2279F25700DAB500 /* NSString+Trees.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB14FF92279F25700DAB500 /* NSString+Trees.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2DB14FDF2279F0A100DAB500 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2D13E67C227A9E1E00848EA5 /* MJBinarySearchTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJBinarySearchTree.h; sourceTree = "<group>"; };
+		2D13E67D227A9E1E00848EA5 /* MJBinarySearchTree.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJBinarySearchTree.m; sourceTree = "<group>"; };
+		2DB14FE12279F0A100DAB500 /* BinaryTreePrinterOC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BinaryTreePrinterOC; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DB14FE42279F0A100DAB500 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2DB14FEC2279F0CB00DAB500 /* MJBinaryTrees.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJBinaryTrees.h; sourceTree = "<group>"; };
+		2DB14FED2279F0CB00DAB500 /* MJBinaryTrees.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJBinaryTrees.m; sourceTree = "<group>"; };
+		2DB14FEF2279F1C000DAB500 /* MJPrinter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJPrinter.h; sourceTree = "<group>"; };
+		2DB14FF02279F1C000DAB500 /* MJPrinter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJPrinter.m; sourceTree = "<group>"; };
+		2DB14FF22279F1D600DAB500 /* MJLevelOrderPrinter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJLevelOrderPrinter.h; sourceTree = "<group>"; };
+		2DB14FF32279F1D600DAB500 /* MJLevelOrderPrinter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJLevelOrderPrinter.m; sourceTree = "<group>"; };
+		2DB14FF52279F1E600DAB500 /* MJInorderPrinter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJInorderPrinter.h; sourceTree = "<group>"; };
+		2DB14FF62279F1E600DAB500 /* MJInorderPrinter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MJInorderPrinter.m; sourceTree = "<group>"; };
+		2DB14FF82279F25700DAB500 /* NSString+Trees.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Trees.h"; sourceTree = "<group>"; };
+		2DB14FF92279F25700DAB500 /* NSString+Trees.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Trees.m"; sourceTree = "<group>"; };
+		2DB14FFB2279F4DF00DAB500 /* MJBinaryTreeInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MJBinaryTreeInfo.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2DB14FDE2279F0A100DAB500 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2D13E67B227A9E0500848EA5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2D13E67C227A9E1E00848EA5 /* MJBinarySearchTree.h */,
+				2D13E67D227A9E1E00848EA5 /* MJBinarySearchTree.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2D818EEE227AC55100EDA2C8 /* MJPrinter */ = {
+			isa = PBXGroup;
+			children = (
+				2DB14FEF2279F1C000DAB500 /* MJPrinter.h */,
+				2DB14FF02279F1C000DAB500 /* MJPrinter.m */,
+				2DB14FF22279F1D600DAB500 /* MJLevelOrderPrinter.h */,
+				2DB14FF32279F1D600DAB500 /* MJLevelOrderPrinter.m */,
+				2DB14FF52279F1E600DAB500 /* MJInorderPrinter.h */,
+				2DB14FF62279F1E600DAB500 /* MJInorderPrinter.m */,
+			);
+			path = MJPrinter;
+			sourceTree = "<group>";
+		};
+		2DB14FD82279F0A100DAB500 = {
+			isa = PBXGroup;
+			children = (
+				2DB14FE32279F0A100DAB500 /* BinaryTreePrinterOC */,
+				2DB14FE22279F0A100DAB500 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2DB14FE22279F0A100DAB500 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2DB14FE12279F0A100DAB500 /* BinaryTreePrinterOC */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2DB14FE32279F0A100DAB500 /* BinaryTreePrinterOC */ = {
+			isa = PBXGroup;
+			children = (
+				2D13E67B227A9E0500848EA5 /* Model */,
+				2DB14FEB2279F0A800DAB500 /* MJBinaryTrees */,
+				2DB14FE42279F0A100DAB500 /* main.m */,
+			);
+			path = BinaryTreePrinterOC;
+			sourceTree = "<group>";
+		};
+		2DB14FEB2279F0A800DAB500 /* MJBinaryTrees */ = {
+			isa = PBXGroup;
+			children = (
+				2D818EEE227AC55100EDA2C8 /* MJPrinter */,
+				2DB14FEC2279F0CB00DAB500 /* MJBinaryTrees.h */,
+				2DB14FED2279F0CB00DAB500 /* MJBinaryTrees.m */,
+				2DB14FFB2279F4DF00DAB500 /* MJBinaryTreeInfo.h */,
+				2DB14FF82279F25700DAB500 /* NSString+Trees.h */,
+				2DB14FF92279F25700DAB500 /* NSString+Trees.m */,
+			);
+			path = MJBinaryTrees;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2DB14FE02279F0A100DAB500 /* BinaryTreePrinterOC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DB14FE82279F0A100DAB500 /* Build configuration list for PBXNativeTarget "BinaryTreePrinterOC" */;
+			buildPhases = (
+				2DB14FDD2279F0A100DAB500 /* Sources */,
+				2DB14FDE2279F0A100DAB500 /* Frameworks */,
+				2DB14FDF2279F0A100DAB500 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BinaryTreePrinterOC;
+			productName = BinaryTreePrinterOC;
+			productReference = 2DB14FE12279F0A100DAB500 /* BinaryTreePrinterOC */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2DB14FD92279F0A100DAB500 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "MJ Lee";
+				TargetAttributes = {
+					2DB14FE02279F0A100DAB500 = {
+						CreatedOnToolsVersion = 10.2;
+					};
+				};
+			};
+			buildConfigurationList = 2DB14FDC2279F0A100DAB500 /* Build configuration list for PBXProject "BinaryTreePrinterOC" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2DB14FD82279F0A100DAB500;
+			productRefGroup = 2DB14FE22279F0A100DAB500 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2DB14FE02279F0A100DAB500 /* BinaryTreePrinterOC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DB14FDD2279F0A100DAB500 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DB14FFA2279F25700DAB500 /* NSString+Trees.m in Sources */,
+				2DB14FF12279F1C000DAB500 /* MJPrinter.m in Sources */,
+				2DB14FEE2279F0CB00DAB500 /* MJBinaryTrees.m in Sources */,
+				2DB14FE52279F0A100DAB500 /* main.m in Sources */,
+				2DB14FF42279F1D600DAB500 /* MJLevelOrderPrinter.m in Sources */,
+				2D13E67E227A9E1E00848EA5 /* MJBinarySearchTree.m in Sources */,
+				2DB14FF72279F1E600DAB500 /* MJInorderPrinter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2DB14FE62279F0A100DAB500 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2DB14FE72279F0A100DAB500 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2DB14FE92279F0A100DAB500 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2DB14FEA2279F0A100DAB500 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2DB14FDC2279F0A100DAB500 /* Build configuration list for PBXProject "BinaryTreePrinterOC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DB14FE62279F0A100DAB500 /* Debug */,
+				2DB14FE72279F0A100DAB500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DB14FE82279F0A100DAB500 /* Build configuration list for PBXNativeTarget "BinaryTreePrinterOC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DB14FE92279F0A100DAB500 /* Debug */,
+				2DB14FEA2279F0A100DAB500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2DB14FD92279F0A100DAB500 /* Project object */;
+}
