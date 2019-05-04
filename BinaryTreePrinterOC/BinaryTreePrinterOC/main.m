@@ -53,6 +53,9 @@ void test3() {
     printf("---------------------------------\n");
     [MJBinaryTrees println:bst style:MJPrintStyleInorder];
     printf("---------------------------------\n");
+    NSString *str = [MJBinaryTrees printString:bst];
+    NSString *file = @"/Users/mj/Desktop/1.txt";
+    [str writeToFile:file atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 int main(int argc, const char * argv[]) {

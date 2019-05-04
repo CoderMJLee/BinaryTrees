@@ -279,6 +279,12 @@ BinaryTrees.println(heap);
 - 打印
 ```objective-c
 [MJBinaryTrees println:bst];
+
 [MJBinaryTrees println:bst style:MJPrintStyleLevelOrder];
+
 [MJBinaryTrees println:bst style:MJPrintStyleInorder];
+
+NSString *str = [MJBinaryTrees printString:bst];
+NSString *file = @"/Users/mj/Desktop/bst.txt";
+[str writeToFile:file atomically:YES encoding:NSUTF8StringEncoding error:nil];
 ```
