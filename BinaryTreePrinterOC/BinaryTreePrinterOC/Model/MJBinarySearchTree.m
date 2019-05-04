@@ -8,8 +8,7 @@
 
 #import "MJBinarySearchTree.h"
 
-@interface MJBSTNode : NSObject
-{
+@interface MJBSTNode : NSObject {
 @public
     id _element;
     MJBSTNode *_left;
@@ -27,8 +26,7 @@
 }
 @end
 
-@interface MJBinarySearchTree()
-{
+@interface MJBinarySearchTree() {
     NSUInteger _size;
     MJBSTNode *_root;
     MJBSTComparatorBlock _comparatorBlock;

@@ -10,8 +10,7 @@
 #import "NSString+Trees.h"
 
 /******* MJLOPNode begin *******/
-@interface MJLOPNode : NSObject
-{
+@interface MJLOPNode : NSObject {
 @public
     NSUInteger _x;
     NSUInteger _y;
@@ -29,8 +28,7 @@
 /******* MJLOPNode end *******/
 
 /******* MJLOPLevelInfo begin *******/
-@interface MJLOPLevelInfo : NSObject
-{
+@interface MJLOPLevelInfo : NSObject {
 @public
     NSUInteger _leftX;
     NSUInteger _rightX;
@@ -222,8 +220,7 @@ static NSUInteger const TOP_LINE_SPACE = 1;
 @end
 /******* MJLOPNode end *******/
 
-@interface MJLevelOrderPrinter()
-{
+@interface MJLevelOrderPrinter() {
 @public
     MJLOPNode *_root;
     NSUInteger _maxWidth;

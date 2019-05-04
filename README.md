@@ -5,6 +5,7 @@
 	- [简介（Intro）](#简介intro)
 	- [核心API（Core API）](#核心apicore-api)
 	- [示例（Example）](#示例example)
+- [BinaryTreePrinterOC](#binarytreeprinteroc)
 
 ## BinaryTreeGraph（JS版本）
 - 用于展示二叉树的图形化小工具（Graph for displaying a binary tree）
@@ -235,3 +236,49 @@ for (int i = 0; i < 10; i++) {
 BinaryTrees.println(heap);
 ```
 ![](https://img2018.cnblogs.com/blog/497279/201904/497279-20190426114408842-867838307.png)
+
+## BinaryTreePrinterOC
+- 实现`MJBinaryTreeInfo`协议
+```objective-c
+@interface MJBSTNode : NSObject {
+@public
+    id _element;
+    MJBSTNode *_left;
+    MJBSTNode *_right;
+}
+@end
+
+@interface MJBinarySearchTree : NSObject <MJBinaryTreeInfo>
+@end
+
+@interface MJBinarySearchTree() {
+    MJBSTNode *_root;
+}
+@end
+
+@implementation MJBinarySearchTree
+#pragma mark - MJBinaryTreeInfo
+- (id)left:(MJBSTNode *)node {
+    return node->_left;
+}
+
+- (id)right:(MJBSTNode *)node {
+    return node->_right;
+}
+
+- (id)string:(MJBSTNode *)node {
+    return node->_element;
+}
+
+- (id)root {
+    return _root;
+}
+@end
+```
+
+- 打印
+```objective-c
+[MJBinaryTrees println:bst];
+[MJBinaryTrees println:bst style:MJPrintStyleLevelOrder];
+[MJBinaryTrees println:bst style:MJPrintStyleInorder];
+```
