@@ -110,7 +110,7 @@ Ext.define('MJ.BinaryTree', {
             } else { // node是父节点的右子树
                 node.parent.right = replacement;
             }
-            this.afterRemove_(node, isLeft, replacement);
+            this.afterRemove_(replacement);
             node.left = node.right = node.parent = null;
         } else if (!node.parent) { // node是根节点
             this.root = null;
@@ -123,13 +123,11 @@ Ext.define('MJ.BinaryTree', {
             } else {
                 node.parent.right = null;
             }
-            this.afterRemove_(node, isLeft);
+            this.afterRemove_(node);
             node.parent = null;
         }
     },
-    afterRemove_: function (node, isLeft, replacement) {
-
-    },
+    afterRemove_: function (node) { },
     createNode: function (element, parent) {
         return new MJ.BinaryTree.Node({
             element: element,

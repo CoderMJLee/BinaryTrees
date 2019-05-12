@@ -67,9 +67,7 @@ Ext.define('MJ.BST', {
         // 添加之后
         this.afterAdd_(newNode);
     },
-    afterAdd_: function (node) {
-
-    },
+    afterAdd_: function (node) { },
     _node: function(element) {
         if(!element) return null;
         var node = this.root;

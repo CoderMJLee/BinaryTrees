@@ -26,7 +26,7 @@ Ext.define('MJ.AVLTree', {
             }
         }
     },
-    afterRemove_: function (node, isLeft, replacement) {
+    afterRemove_: function (node) {
         while (node = node.parent) {
             if (node.isBalanced()) {
                 node.updateHeight();

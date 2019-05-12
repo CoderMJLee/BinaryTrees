@@ -65,13 +65,10 @@ Ext.define('MJ.RBTree', {
             this.rotateLeft_(grand);
         }
     },
-    afterRemove_: function (node, isLeft, replacement) {
-        // 如果被删除的是红色节点
-        if (this._isRed(node)) return;
-
+    afterRemove_: function (node) {
         // 如果替代节点是红色
-        if (this._isRed(replacement)) {
-            this._black(replacement);
+        if (this._isRed(node)) {
+            this._black(node);
             return;
         }
 
@@ -81,8 +78,9 @@ Ext.define('MJ.RBTree', {
 
         // 如果替代节点是黑色
         // 兄弟节点
-        var sibling = isLeft ? parent.right : parent.left;
-        if (isLeft) { // 兄弟节点在右边
+        var left = node.isLeftChild() || !parent.left;
+        var sibling = left ? parent.right : parent.left;
+        if (left) { // 兄弟节点在右边
             if (this._isRed(sibling)) {
                 this._black(sibling);
                 this._red(parent);
