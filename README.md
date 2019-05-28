@@ -2,9 +2,9 @@
 - 一些二叉树相关的操作(Some operations for binary tree)
 - [BinaryTreeGraph（JS版本）](#binarytreegraphjs版本)
 - [BinaryTreePrinter（Java版本）](#binarytreeprinterjava版本)
-	- [简介（Intro）](#简介intro)
-	- [核心API（Core API）](#核心apicore-api)
-	- [示例（Example）](#示例example)
+  - [简介（Intro）](#简介intro)
+  - [核心API（Core API）](#核心apicore-api)
+  - [示例（Example）](#示例example)
 - [BinaryTreePrinterOC](#binarytreeprinteroc)
 
 ## BinaryTreeGraph（JS版本）
@@ -211,16 +211,14 @@ public class BinaryHeap<E> implements BinaryTreeInfo {
 
 	@Override
 	public Object left(Object node) {
-		int leftIndex = ((int)node << 1) + 1;
-		if (leftIndex >= size) return null;
-		return leftIndex;
+		int index = ((int)node << 1) + 1;
+		return index >= size ? null : index;
 	}
 
 	@Override
 	public Object right(Object node) {
-		int rightIndex = ((int)node << 1) + 2;
-		if (rightIndex >= size) return null;
-		return rightIndex;
+		int index = ((int)node << 1) + 2;
+		return index >= size ? null : index;
 	}
 
 	@Override
