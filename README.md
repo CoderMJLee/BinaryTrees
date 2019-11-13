@@ -223,7 +223,7 @@ public class BinaryHeap<E> implements BinaryTreeInfo {
 
 	@Override
 	public Object string(Object node) {
-		return elements[(int) node];
+		return elements[(int)node];
 	}
 }
 
