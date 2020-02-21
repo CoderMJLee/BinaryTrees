@@ -103,8 +103,8 @@ public class Main {
 	}
 	
 	static void tree3() {
-		 // String string = BinaryTrees.printString(bsts.get(0));
-		 // Files.writeToFile("F://1.txt", string);
+		  // String string = BinaryTrees.printString(bsts.get(0));
+		  // Files.writeToFile("F:/a/b/c/1.txt", string);
 	}
 
 	static final String LINE = "----------------------------------";

@@ -15,15 +15,16 @@ public class Files {
 		
 		try {
 			File file = new File(filePath);
-			if (!file.exists()) {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
+			File pFile = file.getParentFile();
+			if (pFile != null) {
+				pFile.mkdirs();
 			}
 			
-			try (FileWriter writer = new FileWriter(file, append);
-					BufferedWriter out = new BufferedWriter(writer) ) {
+			try (
+				FileWriter writer = new FileWriter(file, append);
+				BufferedWriter out = new BufferedWriter(writer) 
+			) {
 				out.write(data.toString());
-                out.flush();
             }
 		} catch (Exception e) {
 			e.printStackTrace();
