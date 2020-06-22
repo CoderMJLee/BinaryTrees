@@ -34,7 +34,7 @@ public class LevelOrderPrinter extends Printer {
 
 	public LevelOrderPrinter(BinaryTreeInfo tree) {
 		super(tree);
-
+		
 		root = new Node(tree.root(), tree);
 		maxWidth = root.width;
 	}

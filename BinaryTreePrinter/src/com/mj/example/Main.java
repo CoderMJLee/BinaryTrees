@@ -12,8 +12,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		tree1();
-		tree2();
-		tree3();
+//		tree2();
 	}
 	
 	static void tree1() {
@@ -100,11 +99,6 @@ public class Main {
 		BinaryTrees.println(info2);
 		System.out.println(LINE);
 		BinaryTrees.println(info2, PrintStyle.INORDER);
-	}
-	
-	static void tree3() {
-		  // String string = BinaryTrees.printString(bsts.get(0));
-		  // Files.writeToFile("F:/a/b/c/1.txt", string);
 	}
 
 	static final String LINE = "----------------------------------";
